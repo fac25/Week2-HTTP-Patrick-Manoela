@@ -15,7 +15,7 @@ Project-specific
 - [ ] I want to filter by different categories.
 - [ ] I want to sort the result by different whatever.
 - [ ] I want to have a quick overview of the recipe without reloading the page.
-- [ ] Each recipe should have a different page for me to see in detail the instructions.
+- [ ] Each recipe should have a different page for me to see in detail the instructions. [#7][i7]
 - [ ] I would like to have a list with my favourite recipes saved. [#2][i2]
 
 
@@ -27,3 +27,4 @@ Project-specific
 
 <!-- Issue references -->
 [i2]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/issues/2
+[i7]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/issues/7
