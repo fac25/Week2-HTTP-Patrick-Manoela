@@ -1,4 +1,5 @@
-import { getRecipeName } from "./spoonacular.js";
+import { getRecipeName } from "./apis/spoonacular.js";
+import { getUsers } from "./apis/pantry.js";
 
 const input = document.querySelector("input");
 const button = document.querySelector("button");
@@ -31,3 +32,5 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
   name.innerText = title;
   parent.append(newElement);
 }
+
+getUsers();
