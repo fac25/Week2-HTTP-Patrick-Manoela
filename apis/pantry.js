@@ -14,8 +14,30 @@ async function getUsers() {
     `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
     requestOptions
   );
+  const data = await response.json();
 
-  console.log(await response.json());
+  return data.usersArr;
 }
 
-export { getUsers };
+async function editDocument() {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify();
+
+  var requestOptions = {
+    method: "PUT",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  const response = await fetch(
+    `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+    requestOptions
+  );
+
+  return await response.json();
+}
+
+export { getUsers, editDocument };
