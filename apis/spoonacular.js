@@ -1,6 +1,6 @@
 const API_KEY = "7b66bcffb0ff477498ca05be367d653a";
 
-async function getRecipeName(name) {
+async function getRecipesByName(name) {
   const query = await fetch(
     `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${name}`
   );
@@ -8,4 +8,4 @@ async function getRecipeName(name) {
   return data;
 }
 
-export { getRecipeName };
+export { getRecipesByName };

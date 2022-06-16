@@ -1,5 +1,5 @@
-import { getRecipeName } from "./apis/spoonacular.js";
-import { getUsers } from "./apis/pantry.js";
+import { getRecipesByName } from "./apis/spoonacular.js";
+import { editDocument, getUsers } from "./apis/pantry.js";
 
 const input = document.querySelector("input");
 const button = document.querySelector("button");
@@ -7,7 +7,7 @@ const button = document.querySelector("button");
 button.addEventListener("click", handleClick);
 
 async function handleClick() {
-  const searchResponse = await getRecipeName(input.value);
+  const searchResponse = await getRecipesByName(input.value);
   const recipesArr = searchResponse.results;
 
   recipesArr.forEach(({ title, image }) =>
@@ -33,4 +33,4 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
   parent.append(newElement);
 }
 
-getUsers();
+console.log(await getUsers());
