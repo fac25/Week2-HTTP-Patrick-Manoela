@@ -9,8 +9,7 @@ h3,
 h4,
 h5,
 h6 {
-
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   margin: 5px 0;
   letter-spacing: 2px;
 }
@@ -18,12 +17,13 @@ h6 {
 li,
 ul,
 ol {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   padding: 0;
   list-style-type: none;
 }
 
-ul, li {
+ul,
+li {
   margin: 0 0 5px 0;
 }
 ul {
@@ -48,7 +48,7 @@ ol {
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-end;
-  align-content: flex-start
+  align-content: flex-start;
 }
 
 /* Search button*/
@@ -94,6 +94,48 @@ ol {
 }
 /* -- Search button -- */
 
+.button-8 {
+  background-color: #e1ecf4;
+  border-radius: 3px;
+  border: 1px solid #009688;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #399d86;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.15385;
+  margin: 0;
+  outline: none;
+  padding: 8px .8em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.button-8:hover,
+.button-8:focus {
+  background-color: #b3d3ea;
+  color: #2c5777;
+}
+
+.button-8:focus {
+  box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+}
+
+.button-8:active {
+  background-color: #a0c7e4;
+  box-shadow: none;
+  color: #2c5777;
+}
+
 .recipes {
   padding-left: auto;
   padding-right: auto;
@@ -119,13 +161,13 @@ h4 {
   white-space: normal;
 }
 
-.card__ingredients, .card__instructions {
-  font-family: 'Montserrat', sans-serif;
+.card__ingredients,
+.card__instructions {
+  font-family: "Montserrat", sans-serif;
   max-height: 110px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 
 .card__name {
   min-width: 110%;
