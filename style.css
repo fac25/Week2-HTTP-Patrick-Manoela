@@ -2050,19 +2050,41 @@ a {
 .side-bar {
   position: fixed;
   top: 0;
-  right: -100vw;
+  right: -100rem; /* Hide from screen */
   display: flex;
   flex-direction: column;
   height: 100vh;
   padding: 2rem;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s linear;
+  transition: all 0.3s ease-in-out;
+  overflow: scroll;
   z-index: 3;
 }
 
 .side-bar--active {
   right: 0;
+}
+
+.side-bar__card {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.side-bar__card:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.side-bar__image {
+  height: 50px;
+}
+
+.side-bar__name {
+  margin-left: 1rem;
+  user-select: none;
 }
 
 .side-bar__default-content--hidden {

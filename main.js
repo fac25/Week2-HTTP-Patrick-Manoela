@@ -214,7 +214,7 @@ function signIn() {
   // Change Sign In btn content
   signInBtn.innerHTML = "Saved List";
 
-  createNotification("Signed in successfully");
+  if (!localStorage.signedIn) createNotification("Signed in successfully");
   localStorage.setItem("signedIn", true);
   localStorage.setItem("username", username.value);
 
@@ -222,8 +222,42 @@ function signIn() {
 }
 
 async function updateSideBarContent() {
+  const sideBarTitle = document.querySelector(".side-bar__title");
   const currentUserData = await getCurrentUserData(localStorage.username);
-  console.log(currentUserData);
+  const savedList = await currentUserData.savedList;
+
+  sideBarTitle.innerText = "Recipe Binder";
+
+  // If user's savedList is empty, exit function
+  if (!savedList)
+    return createElement({
+      tag: "p",
+      className: "side-bar__empty",
+      parentSelector: ".side-bar__recipes",
+      text: "You haven't saved any recipes yet",
+    });
+
+  savedList.forEach((item) => {
+    const recipeContainer = createElement({
+      tag: "div",
+      parentSelector: ".side-bar__recipes",
+      className: "side-bar__card",
+    });
+
+    const recipeImage = createElement({
+      tag: "img",
+      parent: recipeContainer,
+      className: "side-bar__image",
+    });
+    recipeImage.src = item.image;
+
+    const recipeTitle = createElement({
+      tag: "p",
+      parent: recipeContainer,
+      className: "side-bar__name",
+      text: item.title,
+    });
+  });
 }
 
 async function createAccount() {
@@ -265,7 +299,7 @@ function createElement({
   text = "",
   id,
 }) {
-  const parentEl = parent || $(parentSelector);
+  const parentEl = parent || document.querySelector(parentSelector);
   const newElement = document.createElement(tag);
 
   if (text) newElement.innerText = text;
