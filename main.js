@@ -28,7 +28,6 @@ async function getRecipesByName(name) {
 // o----------------o
 
 const PANTRY_ID = "03e72aeb-874d-4b7b-9afc-e5bdb49ef939";
-console.log(await getPantryUsers());
 
 async function getPantryUsers() {
   const requestOptions = {
@@ -79,13 +78,37 @@ function createHeaders() {
   return myHeaders;
 }
 
-async function addToSavedList(username, newContent) {
-  const savedList = data[currentUserIndex].savedList;
+async function updateSavedList(username, savedList) {
+  const data = await getPantryUsers();
+  const currentUser = await data.find((user) => user.username === username);
+  currentUser.savedList = savedList;
 
-  if (!savedList) data[currentUserIndex].savedList = [];
+  const requestOptions = {
+    method: "POST",
+    headers: createHeaders(),
+    body: JSON.stringify({ usersArr: await data }),
+    redirect: "follow",
+  };
 
-  data[currentUserIndex].savedList.push(newContent);
-  addPantryUser(JSON.stringify({ usersArr: [...(await data)] }));
+  // Post information
+  const response = await fetch(
+    `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+    requestOptions
+  );
+
+  console.log(await getPantryUsers());
+  return;
+}
+
+async function deleteFromSavedList(username, deletedItemIndex) {
+  const currentUserData = await getCurrentUserData(username);
+  const savedList = await currentUserData.savedList;
+
+  if (!savedList) currentUserData.savedList = [];
+
+  currentUserData.savedList.splice(deletedItemIndex, 1);
+  renderSavedList(currentUserData.savedList);
+  updateSavedList(username, await currentUserData.savedList);
 }
 
 // o-------------------o
@@ -108,7 +131,6 @@ async function handleClick() {
 }
 
 function createRecipeCards(recipesArr) {
-  console.log(recipesArr);
   recipesArr.forEach(
     ({ title, image, extendedIngredients, analyzedInstructions, sourceUrl }) =>
       createFromTemplate({
@@ -232,10 +254,19 @@ async function updateSideBarContent() {
       text: "You haven't saved any recipes yet",
     });
 
-  savedList.forEach((item) => {
+  renderSavedList(savedList);
+}
+
+function renderSavedList(savedList) {
+  const parentContainer = document.querySelector(".side-bar__recipes");
+
+  // Clear element before rendering
+  parentContainer.innerHTML = "";
+
+  savedList.forEach((item, index) => {
     const recipeContainer = createElement({
       tag: "div",
-      parentSelector: ".side-bar__recipes",
+      parent: parentContainer,
       className: "side-bar__card",
     });
 
@@ -259,6 +290,10 @@ async function updateSideBarContent() {
       className: "side-bar__delete",
       innerHTML: `<i class="fa fa-remove"></i>`,
     });
+
+    deleteBtn.addEventListener("click", () =>
+      deleteFromSavedList(localStorage.username, index)
+    );
   });
 }
 
