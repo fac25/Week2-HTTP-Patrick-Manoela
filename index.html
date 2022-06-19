@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"
+      rel="stylesheet"
+    />
     <title>Lasagna-me</title>
   </head>
   <body>
@@ -22,7 +25,7 @@
         <div class="w3-right w3-hide-small">
           <a href="#about" class="w3-bar-item w3-button">About</a>
           <a href="#menu" class="w3-bar-item w3-button">Quick-view</a>
-          <a href="#sign-in" class="w3-bar-item w3-button">Sign-in</a>
+          <a href="#sign-in" class="sign-in w3-bar-item w3-button">Sign-in</a>
         </div>
       </div>
     </div>
@@ -45,33 +48,36 @@
 
     <div class="notifications"></div>
 
-    <div class="modal">
-      <div class="modal__header">
-        <h2 class="modal__title">Sign In</h2>
-        <i class="modal__close fa-solid fa-xmark"></i>
-      </div>
-      <form class="modal__form" onsubmit="return false">
-        <label class="modal__label" for="name">Username</label>
-        <input
-          class="modal__input"
-          id="username"
-          type="text"
-          placeholder="Your username"
-          required
-        />
-        <label class="modal__label" for="question">Password</label>
-        <input
-          class="modal__input"
-          id="password"
-          type="password"
-          placeholder="Your password"
-          required
-        />
-        <div class="modal__buttons-wrapper">
-          <button class="modal__register">Register</button>
-          <button class="modal__sign-in btn" type="button">Sign In</button>
+    <div class="side-bar">
+      <div class="side-bar__recipes"></div>
+      <div class="side-bar__default-content">
+        <div class="side-bar__header">
+          <h2 class="side-bar__title">Sign In</h2>
+          <i class="side-bar__close fa-solid fa-xmark"></i>
         </div>
-      </form>
+        <form class="side-bar__form" onsubmit="return false">
+          <label class="side-bar__label" for="name">Username</label>
+          <input
+            class="side-bar__input"
+            id="username"
+            type="text"
+            placeholder="Your username"
+            required
+          />
+          <label class="side-bar__label" for="question">Password</label>
+          <input
+            class="side-bar__input"
+            id="password"
+            type="password"
+            placeholder="Your password"
+            required
+          />
+          <div class="side-bar__buttons-wrapper">
+            <button class="side-bar__register">Register</button>
+            <button class="side-bar__sign-in btn" type="button">Sign In</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- Page content -->
@@ -155,7 +161,9 @@
     <script type="module" src="main.js"></script>
 
     <!-- Font Awesome Icon Library -->
-    <script       src="https://kit.fontawesome.com/248cd170f1.js"
-      crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/248cd170f1.js"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

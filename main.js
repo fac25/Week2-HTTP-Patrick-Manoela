@@ -46,6 +46,15 @@ async function getPantryUsers() {
   return data.usersArr;
 }
 
+async function getCurrentUserData(username) {
+  const users = await getPantryUsers();
+  const currentUserData = await users.find(
+    (user) => user.username.toLowerCase() === username.toLowerCase()
+  );
+
+  return currentUserData;
+}
+
 async function addPantryUser(data) {
   const requestOptions = {
     method: "PUT",
@@ -162,36 +171,59 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
 // o-------------------------o
 
 const signInBtn = document.querySelector(".sign-in");
-const modal = document.querySelector(".modal");
-const modalCloseBtn = document.querySelector(".modal__close");
-const modalSignIn = document.querySelector(".modal__sign-in");
-const modalRegisterBtn = document.querySelector(".modal__register");
+const sideBar = document.querySelector(".side-bar");
+const sideBarCloseBtn = document.querySelector(".side-bar__close");
+const sideBarSignIn = document.querySelector(".side-bar__sign-in");
+const sideBarRegisterBtn = document.querySelector(".side-bar__register");
 const username = document.querySelector("#username");
 const password = document.querySelector("#password");
 
-signInBtn.addEventListener("click", toggleModal);
-modalCloseBtn.addEventListener("click", toggleModal);
-modalSignIn.addEventListener("click", signIn);
-modalRegisterBtn.addEventListener("click", createAccount);
+// Check if user has already signed in, in previous sessions
+if (localStorage.signedIn) signIn();
+
+signInBtn.addEventListener("click", toggleSideBar);
+sideBarCloseBtn.addEventListener("click", toggleSideBar);
+sideBarSignIn.addEventListener("click", signInAttempt);
+sideBarRegisterBtn.addEventListener("click", createAccount);
 
 // Display Modal
-function toggleModal() {
-  modal.classList.toggle("modal--active");
+function toggleSideBar() {
+  sideBar.classList.toggle("side-bar--active");
 }
 
-async function signIn() {
-  const users = await getPantryUsers();
-  const currentUserData = await users.find(
-    (user) => user.username.toLowerCase() === username.value.toLowerCase()
-  );
+async function signInAttempt() {
+  const currentUserData = await getCurrentUserData(username.value);
 
   // If fields are empty, return notification
   if (!username.value || !password.value)
     return createNotification("Please fill out all required fields");
 
+  if (!currentUserData) return createNotification("Username does not exist");
   currentUserData.password === password.value
-    ? createNotification("Signed in successfully")
-    : createNotification("Incorrect password and/or username");
+    ? signIn()
+    : createNotification("Incorrect password");
+}
+
+function signIn() {
+  const sideBarDefaultContent = document.querySelector(
+    ".side-bar__default-content"
+  );
+  // Hide default content to show binder content
+  sideBarDefaultContent.classList.add("side-bar__default-content--hidden");
+
+  // Change Sign In btn content
+  signInBtn.innerHTML = "Saved List";
+
+  createNotification("Signed in successfully");
+  localStorage.setItem("signedIn", true);
+  localStorage.setItem("username", username.value);
+
+  updateSideBarContent();
+}
+
+async function updateSideBarContent() {
+  const currentUserData = await getCurrentUserData(localStorage.username);
+  console.log(currentUserData);
 }
 
 async function createAccount() {
