@@ -12,7 +12,8 @@
 // o---------------------o
 // | {0} Spoonacular API |
 // o---------------------o
-const API_KEY = "7b66bcffb0ff477498ca05be367d653a";
+// const API_KEY = "7b66bcffb0ff477498ca05be367d653a";
+const API_KEY = "7878bcb59251411fab5fe4c14ee75639";
 
 async function getRecipesByName(name) {
   const query = await fetch(
