@@ -94,7 +94,10 @@ searchButton.addEventListener("click", handleClick);
 
 async function handleClick() {
   const searchResponse = await getRecipesByName(searchInput.value);
+  const recipesContainer = document.querySelector(".recipes");
   const recipesArr = searchResponse.results;
+
+  recipesContainer.innerHTML = "";
 
   createRecipeCards(recipesArr);
 }
