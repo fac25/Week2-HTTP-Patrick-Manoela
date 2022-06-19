@@ -8,8 +8,46 @@
     <title>Founders and Cookers</title>
   </head>
   <body>
-    <input type="search" />
-    <button>Search</button>
+    <nav>
+      <button class="btn sign-in">Sign In</button>
+    </nav>
+
+    <div class="notifications"></div>
+
+
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title">Sign In</h2>
+        <i class="modal__close fa-solid fa-xmark"></i>
+      </div>
+      <form class="modal__form" onsubmit="return false">
+        <label class="modal__label" for="name">Username</label>
+        <input
+          class="modal__input"
+          id="username"
+          type="text"
+          placeholder="Your username"
+          required
+        />
+        <label class="modal__label" for="question">Password</label>
+        <input
+          class="modal__input"
+          id="password"
+          type="password"
+          placeholder="Your password"
+          required
+        />
+        <div class="modal__buttons-wrapper">
+          <button class="modal__register">Register</button>
+          <button class="modal__sign-in btn" type="button">Sign In</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="search">
+      <input class="search__input" type="search" />
+      <button class="search__button">Search</button>
+    </div>
 
     <section class="recipes">
       <template class="card--template">
@@ -19,6 +57,13 @@
         </div>
       </template>
     </section>
+
     <script type="module" src="main.js"></script>
+
+    <!-- Font Awesome Icon Library -->
+    <script
+      src="https://kit.fontawesome.com/248cd170f1.js"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
