@@ -149,7 +149,7 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
       )
       .join("")}`;
   instructions.innerHTML = `${instructionsData
-    .map((instruction) => `<li class='card__step>${instruction.step}</li>`)
+    .map((instruction) => `<li class='card__step'>${instruction.step}</li>`)
     .join("")}`;
   seeMore.href = sourceUrl;
 
