@@ -2078,6 +2078,11 @@ a {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.side-bar__card:hover > .side-bar__delete {
+  opacity: 1;
+  cursor: pointer;
+}
+
 .side-bar__image {
   height: 50px;
 }
@@ -2085,6 +2090,18 @@ a {
 .side-bar__name {
   margin-left: 1rem;
   user-select: none;
+}
+
+.side-bar__delete {
+  background-color: transparent;
+  border: none;
+  margin-left: 1rem;
+  transition: opacity 0.2s linear;
+  opacity: 0;
+}
+
+.side-bar__delete:hover {
+  transform: scale(1.1);
 }
 
 .side-bar__default-content--hidden {
@@ -2170,7 +2187,7 @@ a {
 }
 
 .notifications {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 1rem;
   display: flex;

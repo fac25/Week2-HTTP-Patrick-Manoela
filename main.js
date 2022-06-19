@@ -80,11 +80,6 @@ function createHeaders() {
 }
 
 async function addToSavedList(username, newContent) {
-  const data = await getPantryUsers();
-  const currentUserIndex = await data.findIndex(
-    (user) => user.username === username
-  );
-
   const savedList = data[currentUserIndex].savedList;
 
   if (!savedList) data[currentUserIndex].savedList = [];
@@ -184,7 +179,7 @@ if (localStorage.signedIn) signIn();
 signInBtn.addEventListener("click", toggleSideBar);
 sideBarCloseBtn.addEventListener("click", toggleSideBar);
 sideBarSignIn.addEventListener("click", signInAttempt);
-sideBarRegisterBtn.addEventListener("click", createAccount);
+sideBarRegisterBtn.addEventListener("click", register);
 
 // Display Modal
 function toggleSideBar() {
@@ -257,22 +252,30 @@ async function updateSideBarContent() {
       className: "side-bar__name",
       text: item.title,
     });
+
+    const deleteBtn = createElement({
+      tag: "button",
+      parent: recipeContainer,
+      className: "side-bar__delete",
+      innerHTML: `<i class="fa fa-remove"></i>`,
+    });
   });
 }
 
-async function createAccount() {
+async function register() {
   const data = await getPantryUsers();
-  const doesUsernameExist = await data.find(
+  const usernameExists = await data.find(
     (user) => user.username === username.value
   );
 
-  if (doesUsernameExist) return createNotification("Username already exists");
+  if (usernameExists) return createNotification("Username already exists");
 
   await addPantryUser({
     usersArr: [{ username: username.value, password: password.value }],
   });
 
   createNotification("Account created");
+  signIn();
 }
 
 // o-----------------------o
@@ -297,11 +300,13 @@ function createElement({
   parent,
   parentSelector,
   text = "",
+  innerHTML,
   id,
 }) {
   const parentEl = parent || document.querySelector(parentSelector);
   const newElement = document.createElement(tag);
 
+  if (innerHTML) newElement.innerHTML = innerHTML;
   if (text) newElement.innerText = text;
   if (className) newElement.classList.add(className);
   if (id) newElement.id = id;
