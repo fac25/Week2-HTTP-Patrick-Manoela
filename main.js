@@ -145,7 +145,7 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
     ${extendedIngredients
       .map(
         (ingredient) =>
-          `<li class='card__ingredient>${ingredient.originalName}</li>`
+          `<li class='card__ingredient>${ingredient.original}</li>`
       )
       .join("")}`;
   instructions.innerHTML = `${instructionsData
