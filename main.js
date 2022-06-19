@@ -1,23 +1,105 @@
-import { getRecipesByName } from "./apis/spoonacular.js";
-import { editDocument, getUsers } from "./apis/pantry.js";
-
 /*
+  Table of Contents
+  -----------------
+  {0} Spoonacular API [recipe/nutrition information]
+  {1} Pantry API [free cloud JSON storage]
+  {2} Recipe Search
+  {3} Sign In && Register
 
-o---------------o
-| Recipe Search |
-o---------------o
-
+  {99} Helper Functions 
 */
 
-const input = document.querySelector(".search__input");
-const button = document.querySelector(".search__button");
+// o---------------------o
+// | {0} Spoonacular API |
+// o---------------------o
+const API_KEY = "7b66bcffb0ff477498ca05be367d653a";
 
-button.addEventListener("click", handleClick);
+async function getRecipesByName(name) {
+  const query = await fetch(
+    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${name}`
+  );
+  const data = await query.json();
+  return data;
+}
+
+// o----------------o
+// | {1} Pantry API |
+// o----------------o
+
+const PANTRY_ID = "03e72aeb-874d-4b7b-9afc-e5bdb49ef939";
+console.log(await getPantryUsers());
+
+async function getPantryUsers() {
+  const requestOptions = {
+    method: "GET",
+    headers: createHeaders(),
+    redirect: "follow",
+  };
+
+  const response = await fetch(
+    `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+    requestOptions
+  );
+  const data = await response.json();
+
+  return data.usersArr;
+}
+
+async function addPantryUser(data) {
+  const requestOptions = {
+    method: "PUT",
+    headers: createHeaders(),
+    body: JSON.stringify(data),
+    redirect: "follow",
+  };
+
+  // Post information
+  const response = await fetch(
+    `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+    requestOptions
+  );
+
+  return response.json();
+}
+
+function createHeaders() {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  return myHeaders;
+}
+
+async function addToSavedList(username, newContent) {
+  const data = await getPantryUsers();
+  const currentUserIndex = await data.findIndex(
+    (user) => user.username === username
+  );
+
+  const savedList = data[currentUserIndex].savedList;
+
+  if (!savedList) data[currentUserIndex].savedList = [];
+
+  data[currentUserIndex].savedList.push(newContent);
+  addPantryUser(JSON.stringify({ usersArr: [...(await data)] }));
+}
+
+// o-------------------o
+// | {2} Recipe Search |
+// o-------------------o
+
+const searchInput = document.querySelector(".search__input");
+const searchButton = document.querySelector(".search__button");
+
+searchButton.addEventListener("click", handleClick);
 
 async function handleClick() {
-  const searchResponse = await getRecipesByName(input.value);
+  const searchResponse = await getRecipesByName(searchInput.value);
   const recipesArr = searchResponse.results;
 
+  createRecipeCards(recipesArr);
+}
+
+function createRecipeCards(recipesArr) {
   recipesArr.forEach(({ title, image }) =>
     createFromTemplate({
       templateSelector: ".card--template",
@@ -25,6 +107,93 @@ async function handleClick() {
       content: { imgSrc: image, title },
     })
   );
+}
+
+// o-------------------------o
+// | {3} Sign In && Register |
+// o-------------------------o
+
+const signInBtn = document.querySelector(".sign-in");
+const modal = document.querySelector(".modal");
+const modalCloseBtn = document.querySelector(".modal__close");
+const modalSignIn = document.querySelector(".modal__sign-in");
+const modalRegisterBtn = document.querySelector(".modal__register");
+const username = document.querySelector("#username");
+const password = document.querySelector("#password");
+
+signInBtn.addEventListener("click", toggleModal);
+modalCloseBtn.addEventListener("click", toggleModal);
+modalSignIn.addEventListener("click", signIn);
+modalRegisterBtn.addEventListener("click", createAccount);
+
+// Display Modal
+function toggleModal() {
+  modal.classList.toggle("modal--active");
+}
+
+async function signIn() {
+  const users = await getPantryUsers();
+  const currentUserData = await users.find(
+    (user) => user.username.toLowerCase() === username.value.toLowerCase()
+  );
+
+  // If fields are empty, return notification
+  if (!username.value || !password.value)
+    return createNotification("Please fill out all required fields");
+
+  currentUserData.password === password.value
+    ? createNotification("Signed in successfully")
+    : createNotification("Incorrect password and/or username");
+}
+
+async function createAccount() {
+  const data = await getPantryUsers();
+  const doesUsernameExist = await data.find(
+    (user) => user.username === username.value
+  );
+
+  if (doesUsernameExist) return createNotification("Username already exists");
+
+  await addPantryUser({
+    usersArr: [{ username: username.value, password: password.value }],
+  });
+
+  createNotification("Account created");
+}
+
+// o-----------------------o
+// | {99} Helper Functions |
+// o-----------------------o
+
+function createNotification(text) {
+  const notificationsDiv = document.querySelector(".notifications");
+  const notification = createElement({
+    tag: "div",
+    className: "notification",
+    parent: notificationsDiv,
+    text: text,
+  });
+
+  setTimeout(() => notification.remove(), 3000);
+}
+
+function createElement({
+  tag,
+  className,
+  parent,
+  parentSelector,
+  text = "",
+  id,
+}) {
+  const parentEl = parent || $(parentSelector);
+  const newElement = document.createElement(tag);
+
+  if (text) newElement.innerText = text;
+  if (className) newElement.classList.add(className);
+  if (id) newElement.id = id;
+  if (parentEl) parentEl.append(newElement);
+
+  return newElement;
 }
 
 function createFromTemplate({ templateSelector, parentSelector, content }) {
@@ -40,59 +209,3 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
   name.innerText = title;
   parent.append(newElement);
 }
-
-/*
-
-o---------o
-| Sign In |
-o---------o
-
-*/
-
-const signInBtn = document.querySelector(".sign-in");
-
-// User clicks 'sign in'
-signInBtn.addEventListener("click", toggleModal);
-
-// Modal pops up, asking for userName and password
-const modal = document.querySelector(".modal");
-
-// Display Modal
-function toggleModal() {
-  modal.classList.toggle("modal--active");
-}
-
-// Hide Modal
-const modalCloseBtn = document.querySelector(".modal__close");
-
-modalCloseBtn.addEventListener("click", toggleModal);
-
-// User clicks 'sign in' in the form to validate userName and password
-const formSignIn = document.querySelector(".modal__button");
-
-formSignIn.addEventListener("click", signIn);
-
-// Check if information is correct
-async function signIn() {
-  const username = document.querySelector("#username").value;
-  const password = document.querySelector("#password").value;
-
-  const users = await getUsers();
-  const currentUserData = users.find(
-    (user) => user.username.toLowerCase() === username.toLowerCase()
-  );
-
-  console.log(
-    currentUserData.password === password
-      ? "Signed In"
-      : "Wrong password and/or username"
-  );
-}
-
-/*
-
-o----------o
-| Register |
-o----------o
-
-*/
