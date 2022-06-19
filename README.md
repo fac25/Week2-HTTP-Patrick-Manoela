@@ -11,7 +11,7 @@
 
 
 Project-specific
-- [ ] As a user I want to be able to search for recipes by ingredient or recipe name.
+- [x] As a user I want to be able to search for recipes by ingredient or recipe name. [#1][i1]
 - [ ] I want to filter by different categories.
 - [ ] I want to sort the result by different whatever.
 - [ ] I want to have a quick overview of the recipe without reloading the page.
@@ -26,5 +26,6 @@ Project-specific
 
 
 <!-- Issue references -->
+[i1]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/pull/1
 [i2]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/issues/2
 [i7]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/issues/7
