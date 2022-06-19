@@ -12,11 +12,12 @@
 // o---------------------o
 // | {0} Spoonacular API |
 // o---------------------o
-const API_KEY = "7b66bcffb0ff477498ca05be367d653a";
+// const API_KEY = "7b66bcffb0ff477498ca05be367d653a";
+const API_KEY = "7878bcb59251411fab5fe4c14ee75639";
 
 async function getRecipesByName(name) {
   const query = await fetch(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${name}`
+    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${name}&addRecipeInformation=true&fillIngredients=true`
   );
   const data = await query.json();
   return data;
@@ -94,19 +95,66 @@ searchButton.addEventListener("click", handleClick);
 
 async function handleClick() {
   const searchResponse = await getRecipesByName(searchInput.value);
+  const recipesContainer = document.querySelector(".recipes");
   const recipesArr = searchResponse.results;
+
+  recipesContainer.innerHTML = "";
 
   createRecipeCards(recipesArr);
 }
 
 function createRecipeCards(recipesArr) {
-  recipesArr.forEach(({ title, image }) =>
-    createFromTemplate({
-      templateSelector: ".card--template",
-      parentSelector: ".recipes",
-      content: { imgSrc: image, title },
-    })
+  console.log(recipesArr);
+  recipesArr.forEach(
+    ({ title, image, extendedIngredients, analyzedInstructions, sourceUrl }) =>
+      createFromTemplate({
+        templateSelector: ".card--template",
+        parentSelector: ".recipes",
+        content: {
+          imageSrc: image,
+          title,
+          extendedIngredients,
+          analyzedInstructions,
+          sourceUrl,
+        },
+      })
   );
+}
+
+function createFromTemplate({ templateSelector, parentSelector, content }) {
+  const parent = document.querySelector(parentSelector);
+  const template = document.querySelector(templateSelector);
+  const {
+    imageSrc,
+    title,
+    extendedIngredients,
+    analyzedInstructions,
+    sourceUrl,
+  } = content;
+  const instructionsData = analyzedInstructions[0].steps;
+
+  const newElement = template.content.cloneNode(true);
+  const image = newElement.querySelector(".card__image");
+  const name = newElement.querySelector(".card__name");
+  const ingredients = newElement.querySelector(".card__ingredients");
+  const instructions = newElement.querySelector(".card__instructions");
+  const seeMore = newElement.querySelector(".card__see-more");
+
+  image.src = imageSrc;
+  name.innerText = title;
+  ingredients.innerHTML = `
+    ${extendedIngredients
+      .map(
+        (ingredient) =>
+          `<li class='card__ingredient>${ingredient.original}</li>`
+      )
+      .join("")}`;
+  instructions.innerHTML = `${instructionsData
+    .map((instruction) => `<li class='card__step'>${instruction.step}</li>`)
+    .join("")}`;
+  seeMore.href = sourceUrl;
+
+  parent.append(newElement);
 }
 
 // o-------------------------o
@@ -194,18 +242,4 @@ function createElement({
   if (parentEl) parentEl.append(newElement);
 
   return newElement;
-}
-
-function createFromTemplate({ templateSelector, parentSelector, content }) {
-  const parent = document.querySelector(parentSelector);
-  const template = document.querySelector(templateSelector);
-  const { imgSrc, title } = content;
-
-  const newElement = template.content.cloneNode(true);
-  const img = newElement.querySelector(".card__image");
-  const name = newElement.querySelector(".card__name");
-
-  img.src = imgSrc;
-  name.innerText = title;
-  parent.append(newElement);
 }
