@@ -325,7 +325,7 @@ function renderSavedList(savedList) {
       tag: "button",
       parent: recipeAnchor,
       className: "side-bar__delete",
-      innerHTML: `<i class="fa fa-remove"></i>`,
+      innerHTML: `<i class="fa fa-trash"></i>`,
     });
 
     deleteBtn.addEventListener("click", (event) => {
