@@ -2147,6 +2147,7 @@ a {
 
 .side-bar__close {
   transition: all 0.2s linear;
+  margin-left: 1rem;
 }
 
 .side-bar__close:hover {

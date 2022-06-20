@@ -5,6 +5,7 @@
   {1} Pantry API [free cloud JSON storage]
   {2} Recipe Search
   {3} Sign In && Register
+  {4} CRUD Recipe Binder
 
   {99} Helper Functions 
 */
@@ -111,12 +112,21 @@ async function updateSavedList(username, savedList) {
 async function deleteFromSavedList(username, deletedItemIndex) {
   const currentUserData = await getCurrentUserData(username);
   const savedList = await currentUserData.savedList;
-
   if (!savedList) currentUserData.savedList = [];
 
   currentUserData.savedList.splice(deletedItemIndex, 1);
-  renderSavedList(currentUserData.savedList);
-  updateSavedList(username, await currentUserData.savedList);
+  await updateSavedList(username, await currentUserData.savedList);
+  updateSideBarContent();
+}
+
+async function addToSavedList(username, newItem) {
+  const currentUserData = await getCurrentUserData(username);
+  const savedList = await currentUserData.savedList;
+  if (!savedList) currentUserData.savedList = [];
+
+  currentUserData.savedList.push(newItem);
+  await updateSavedList(username, await currentUserData.savedList);
+  updateSideBarContent();
 }
 
 // o-------------------o
@@ -145,7 +155,7 @@ function createRecipeCards(recipesArr) {
         templateSelector: ".card--template",
         parentSelector: ".recipes",
         content: {
-          imageSrc: image,
+          image,
           title,
           extendedIngredients,
           analyzedInstructions,
@@ -158,24 +168,19 @@ function createRecipeCards(recipesArr) {
 function createFromTemplate({ templateSelector, parentSelector, content }) {
   const parent = document.querySelector(parentSelector);
   const template = document.querySelector(templateSelector);
-  const {
-    imageSrc,
-    title,
-    extendedIngredients,
-    analyzedInstructions,
-    sourceUrl,
-  } = content;
+  const { image, title, extendedIngredients, analyzedInstructions, sourceUrl } =
+    content;
   const instructionsData = analyzedInstructions[0].steps;
 
   const newElement = template.content.cloneNode(true);
-  const image = newElement.querySelector(".card__image");
+  const imageEl = newElement.querySelector(".card__image");
   const name = newElement.querySelector(".card__name");
   const ingredients = newElement.querySelector(".card__ingredients");
   const instructions = newElement.querySelector(".card__instructions");
   const seeMore = newElement.querySelector(".card__see-more");
   const saveBtn = newElement.querySelector(".card__save");
 
-  image.src = imageSrc;
+  imageEl.src = image;
   name.innerText = title;
   ingredients.innerHTML = `
     ${extendedIngredients
@@ -188,6 +193,9 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
     .map((instruction) => `<li class='card__step'>${instruction.step}</li>`)
     .join("")}`;
   seeMore.href = sourceUrl;
+  saveBtn.addEventListener("click", () =>
+    saveRecipe({ image, title, sourceUrl })
+  );
 
   parent.append(newElement);
 }
@@ -247,6 +255,25 @@ function signIn() {
   updateSideBarContent();
 }
 
+async function register() {
+  const data = await getPantryUsers();
+  const usernameExists = await data.find(
+    (user) => user.username === username.value
+  );
+
+  if (usernameExists) return createNotification("Username already exists");
+
+  await addPantryUser({
+    usersArr: [{ username: username.value, password: password.value }],
+  });
+
+  createNotification("Account created");
+  signIn();
+}
+
+// o------------------------o
+// | {4} CRUD Recipe Binder |
+// o------------------0-----o
 async function updateSideBarContent() {
   const sideBarTitle = document.querySelector(".side-bar__title");
   const currentUserData = await getCurrentUserData(localStorage.username);
@@ -273,53 +300,45 @@ function renderSavedList(savedList) {
   parentContainer.innerHTML = "";
 
   savedList.forEach((item, index) => {
-    const recipeContainer = createElement({
-      tag: "div",
+    const recipeAnchor = createElement({
+      tag: "a",
       parent: parentContainer,
       className: "side-bar__card",
     });
+    recipeAnchor.href = item.sourceUrl;
 
     const recipeImage = createElement({
       tag: "img",
-      parent: recipeContainer,
+      parent: recipeAnchor,
       className: "side-bar__image",
     });
     recipeImage.src = item.image;
 
     const recipeTitle = createElement({
       tag: "p",
-      parent: recipeContainer,
+      parent: recipeAnchor,
       className: "side-bar__name",
       text: item.title,
     });
 
     const deleteBtn = createElement({
       tag: "button",
-      parent: recipeContainer,
+      parent: recipeAnchor,
       className: "side-bar__delete",
       innerHTML: `<i class="fa fa-remove"></i>`,
     });
 
-    deleteBtn.addEventListener("click", () =>
-      deleteFromSavedList(localStorage.username, index)
-    );
+    deleteBtn.addEventListener("click", (event) => {
+      // Prevent redirection from Recipe Anchor click
+      event.preventDefault();
+      deleteFromSavedList(localStorage.username, index);
+    });
   });
 }
 
-async function register() {
-  const data = await getPantryUsers();
-  const usernameExists = await data.find(
-    (user) => user.username === username.value
-  );
-
-  if (usernameExists) return createNotification("Username already exists");
-
-  await addPantryUser({
-    usersArr: [{ username: username.value, password: password.value }],
-  });
-
-  createNotification("Account created");
-  signIn();
+function saveRecipe(recipeInfo) {
+  toggleSideBar();
+  addToSavedList(localStorage.username, recipeInfo);
 }
 
 // o-----------------------o
