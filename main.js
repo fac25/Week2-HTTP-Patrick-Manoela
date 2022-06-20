@@ -5,6 +5,7 @@
   {1} Pantry API [free cloud JSON storage]
   {2} Recipe Search
   {3} Sign In && Register
+  {4} CRUD Recipe Binder
 
   {99} Helper Functions 
 */
@@ -16,11 +17,15 @@
 const API_KEY = "7878bcb59251411fab5fe4c14ee75639";
 
 async function getRecipesByName(name) {
-  const query = await fetch(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${name}&addRecipeInformation=true&fillIngredients=true`
-  );
-  const data = await query.json();
-  return data;
+  try {
+    const query = await fetch(
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${name}&addRecipeInformation=true&fillIngredients=true`
+    );
+    const data = await query.json();
+    return data;
+  } catch (error) {
+    handleError(error);
+  }
 }
 
 // o----------------o
@@ -28,60 +33,100 @@ async function getRecipesByName(name) {
 // o----------------o
 
 const PANTRY_ID = "03e72aeb-874d-4b7b-9afc-e5bdb49ef939";
-console.log(await getPantryUsers());
 
 async function getPantryUsers() {
-  const requestOptions = {
-    method: "GET",
-    headers: createHeaders(),
-    redirect: "follow",
-  };
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: createHeaders(),
+      redirect: "follow",
+    };
 
-  const response = await fetch(
-    `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
-    requestOptions
+    const response = await fetch(
+      `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+      requestOptions
+    );
+    const data = await response.json();
+
+    return data.usersArr;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+async function getCurrentUserData(username) {
+  const users = await getPantryUsers();
+  const currentUserData = await users.find(
+    (user) => user.username.toLowerCase() === username.toLowerCase()
   );
-  const data = await response.json();
 
-  return data.usersArr;
+  return currentUserData;
 }
 
 async function addPantryUser(data) {
-  const requestOptions = {
-    method: "PUT",
-    headers: createHeaders(),
-    body: JSON.stringify(data),
-    redirect: "follow",
-  };
+  try {
+    const requestOptions = {
+      method: "PUT",
+      headers: createHeaders(),
+      body: JSON.stringify(data),
+      redirect: "follow",
+    };
 
-  // Post information
-  const response = await fetch(
-    `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
-    requestOptions
-  );
+    // Post information
+    const response = await fetch(
+      `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+      requestOptions
+    );
 
-  return response.json();
+    return response.json();
+  } catch (error) {
+    handleError(error);
+  }
 }
 
-function createHeaders() {
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+async function updateSavedList(username, savedList) {
+  try {
+    const data = await getPantryUsers();
+    const currentUser = await data.find((user) => user.username === username);
+    currentUser.savedList = savedList;
 
-  return myHeaders;
+    const requestOptions = {
+      method: "POST",
+      headers: createHeaders(),
+      body: JSON.stringify({ usersArr: await data }),
+      redirect: "follow",
+    };
+
+    // Post information
+    await fetch(
+      `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+      requestOptions
+    );
+
+    return;
+  } catch (error) {
+    handleError(error);
+  }
 }
 
-async function addToSavedList(username, newContent) {
-  const data = await getPantryUsers();
-  const currentUserIndex = await data.findIndex(
-    (user) => user.username === username
-  );
+async function deleteFromSavedList(username, deletedItemIndex) {
+  const currentUserData = await getCurrentUserData(username);
+  const savedList = await currentUserData.savedList;
+  if (!savedList) currentUserData.savedList = [];
 
-  const savedList = data[currentUserIndex].savedList;
+  currentUserData.savedList.splice(deletedItemIndex, 1);
+  await updateSavedList(username, await currentUserData.savedList);
+  updateSideBarContent();
+}
 
-  if (!savedList) data[currentUserIndex].savedList = [];
+async function addToSavedList(username, newItem) {
+  const currentUserData = await getCurrentUserData(username);
+  const savedList = await currentUserData.savedList;
+  if (!savedList) currentUserData.savedList = [];
 
-  data[currentUserIndex].savedList.push(newContent);
-  addPantryUser(JSON.stringify({ usersArr: [...(await data)] }));
+  currentUserData.savedList.push(newItem);
+  await updateSavedList(username, await currentUserData.savedList);
+  updateSideBarContent();
 }
 
 // o-------------------o
@@ -104,14 +149,13 @@ async function handleClick() {
 }
 
 function createRecipeCards(recipesArr) {
-  console.log(recipesArr);
   recipesArr.forEach(
     ({ title, image, extendedIngredients, analyzedInstructions, sourceUrl }) =>
       createFromTemplate({
         templateSelector: ".card--template",
         parentSelector: ".recipes",
         content: {
-          imageSrc: image,
+          image,
           title,
           extendedIngredients,
           analyzedInstructions,
@@ -124,23 +168,19 @@ function createRecipeCards(recipesArr) {
 function createFromTemplate({ templateSelector, parentSelector, content }) {
   const parent = document.querySelector(parentSelector);
   const template = document.querySelector(templateSelector);
-  const {
-    imageSrc,
-    title,
-    extendedIngredients,
-    analyzedInstructions,
-    sourceUrl,
-  } = content;
+  const { image, title, extendedIngredients, analyzedInstructions, sourceUrl } =
+    content;
   const instructionsData = analyzedInstructions[0].steps;
 
   const newElement = template.content.cloneNode(true);
-  const image = newElement.querySelector(".card__image");
+  const imageEl = newElement.querySelector(".card__image");
   const name = newElement.querySelector(".card__name");
   const ingredients = newElement.querySelector(".card__ingredients");
   const instructions = newElement.querySelector(".card__instructions");
   const seeMore = newElement.querySelector(".card__see-more");
+  const saveBtn = newElement.querySelector(".card__save");
 
-  image.src = imageSrc;
+  imageEl.src = image;
   name.innerText = title;
   ingredients.innerHTML = `
     ${extendedIngredients
@@ -153,6 +193,9 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
     .map((instruction) => `<li class='card__step'>${instruction.step}</li>`)
     .join("")}`;
   seeMore.href = sourceUrl;
+  saveBtn.addEventListener("click", () =>
+    saveRecipe({ image, title, sourceUrl })
+  );
 
   parent.append(newElement);
 }
@@ -162,51 +205,140 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
 // o-------------------------o
 
 const signInBtn = document.querySelector(".sign-in");
-const modal = document.querySelector(".modal");
-const modalCloseBtn = document.querySelector(".modal__close");
-const modalSignIn = document.querySelector(".modal__sign-in");
-const modalRegisterBtn = document.querySelector(".modal__register");
+const sideBar = document.querySelector(".side-bar");
+const sideBarCloseBtn = document.querySelector(".side-bar__close");
+const sideBarSignIn = document.querySelector(".side-bar__sign-in");
+const sideBarRegisterBtn = document.querySelector(".side-bar__register");
 const username = document.querySelector("#username");
 const password = document.querySelector("#password");
 
-signInBtn.addEventListener("click", toggleModal);
-modalCloseBtn.addEventListener("click", toggleModal);
-modalSignIn.addEventListener("click", signIn);
-modalRegisterBtn.addEventListener("click", createAccount);
+// Check if user has already signed in, in previous sessions
+if (localStorage.signedIn) signIn();
+
+signInBtn.addEventListener("click", toggleSideBar);
+sideBarCloseBtn.addEventListener("click", toggleSideBar);
+sideBarSignIn.addEventListener("click", signInAttempt);
+sideBarRegisterBtn.addEventListener("click", register);
 
 // Display Modal
-function toggleModal() {
-  modal.classList.toggle("modal--active");
+function toggleSideBar() {
+  sideBar.classList.toggle("side-bar--active");
 }
 
-async function signIn() {
-  const users = await getPantryUsers();
-  const currentUserData = await users.find(
-    (user) => user.username.toLowerCase() === username.value.toLowerCase()
-  );
+async function signInAttempt() {
+  const currentUserData = await getCurrentUserData(username.value);
 
   // If fields are empty, return notification
   if (!username.value || !password.value)
     return createNotification("Please fill out all required fields");
 
+  if (!currentUserData) return createNotification("Username does not exist");
   currentUserData.password === password.value
-    ? createNotification("Signed in successfully")
-    : createNotification("Incorrect password and/or username");
+    ? signIn()
+    : createNotification("Incorrect password");
 }
 
-async function createAccount() {
+function signIn() {
+  const sideBarDefaultContent = document.querySelector(
+    ".side-bar__default-content"
+  );
+  // Hide default content to show binder content
+  sideBarDefaultContent.classList.add("side-bar__default-content--hidden");
+
+  // Change Sign In btn content
+  signInBtn.innerHTML = "Recipe Binder";
+
+  if (!localStorage.signedIn) createNotification("Signed in successfully");
+  localStorage.setItem("signedIn", true);
+  localStorage.setItem("username", username.value);
+
+  updateSideBarContent();
+}
+
+async function register() {
   const data = await getPantryUsers();
-  const doesUsernameExist = await data.find(
+  const usernameExists = await data.find(
     (user) => user.username === username.value
   );
 
-  if (doesUsernameExist) return createNotification("Username already exists");
+  if (usernameExists) return createNotification("Username already exists");
 
   await addPantryUser({
     usersArr: [{ username: username.value, password: password.value }],
   });
 
   createNotification("Account created");
+  signIn();
+}
+
+// o------------------------o
+// | {4} CRUD Recipe Binder |
+// o------------------0-----o
+async function updateSideBarContent() {
+  const sideBarTitle = document.querySelector(".side-bar__title");
+  const currentUserData = await getCurrentUserData(localStorage.username);
+  const savedList = await currentUserData.savedList;
+
+  sideBarTitle.innerText = "Recipe Binder";
+
+  // If user's savedList is empty, exit function
+  if (!savedList)
+    return createElement({
+      tag: "p",
+      className: "side-bar__empty",
+      parentSelector: ".side-bar__recipes",
+      text: "You haven't saved any recipes yet",
+    });
+
+  renderSavedList(savedList);
+}
+
+function renderSavedList(savedList) {
+  const parentContainer = document.querySelector(".side-bar__recipes");
+
+  // Clear element before rendering
+  parentContainer.innerHTML = "";
+
+  savedList.forEach((item, index) => {
+    const recipeAnchor = createElement({
+      tag: "a",
+      parent: parentContainer,
+      className: "side-bar__card",
+    });
+    recipeAnchor.href = item.sourceUrl;
+
+    const recipeImage = createElement({
+      tag: "img",
+      parent: recipeAnchor,
+      className: "side-bar__image",
+    });
+    recipeImage.src = item.image;
+
+    const recipeTitle = createElement({
+      tag: "p",
+      parent: recipeAnchor,
+      className: "side-bar__name",
+      text: item.title,
+    });
+
+    const deleteBtn = createElement({
+      tag: "button",
+      parent: recipeAnchor,
+      className: "side-bar__delete",
+      innerHTML: `<i class="fa fa-trash"></i>`,
+    });
+
+    deleteBtn.addEventListener("click", (event) => {
+      // Prevent redirection from Recipe Anchor click
+      event.preventDefault();
+      deleteFromSavedList(localStorage.username, index);
+    });
+  });
+}
+
+function saveRecipe(recipeInfo) {
+  toggleSideBar();
+  addToSavedList(localStorage.username, recipeInfo);
 }
 
 // o-----------------------o
@@ -231,15 +363,29 @@ function createElement({
   parent,
   parentSelector,
   text = "",
+  innerHTML,
   id,
 }) {
-  const parentEl = parent || $(parentSelector);
+  const parentEl = parent || document.querySelector(parentSelector);
   const newElement = document.createElement(tag);
 
+  if (innerHTML) newElement.innerHTML = innerHTML;
   if (text) newElement.innerText = text;
   if (className) newElement.classList.add(className);
   if (id) newElement.id = id;
   if (parentEl) parentEl.append(newElement);
 
   return newElement;
+}
+
+function createHeaders() {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  return myHeaders;
+}
+
+function handleError(error) {
+  console.error(error);
+  createNotification("Oops! Something went wrong.");
 }
