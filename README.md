@@ -3,8 +3,8 @@
 ### User Stories
 
 [FAC](https://learn.foundersandcoders.com/course/syllabus/pre-apprenticeship/http/project/)
-- [ ] See an interesting mashup of different data 
-- [ ] Input information to change the displayed result
+- [x] See an interesting mashup of different data 
+- [x] Input information to change the displayed result
 - [ ] View the app on all of my devices [#18][i18]
 - [ ] As an impatient user, I want to see some indication that data is loading
 - [ ] As a confused user, I want to be told when something goes wrong
