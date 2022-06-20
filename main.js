@@ -246,7 +246,7 @@ function signIn() {
   sideBarDefaultContent.classList.add("side-bar__default-content--hidden");
 
   // Change Sign In btn content
-  signInBtn.innerHTML = "Saved List";
+  signInBtn.innerHTML = "Recipe Binder";
 
   if (!localStorage.signedIn) createNotification("Signed in successfully");
   localStorage.setItem("signedIn", true);
