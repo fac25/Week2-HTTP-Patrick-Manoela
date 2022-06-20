@@ -179,6 +179,24 @@ h4 {
   background-color: #8d9d80;
 }
 
+.card__buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.card__see-more {
+  position: absolute;
+}
+
+.card__save {
+  margin-left: 10rem;
+}
+
+.card__save:hover {
+  cursor: pointer;
+}
+
 .icb-hrt {
   font-size: 18px;
   line-height: 1px;
@@ -322,6 +340,11 @@ optgroup {
 }
 optgroup {
   font-weight: bold;
+}
+
+button {
+  background-color: transparent;
+  border: none;
 }
 
 button,

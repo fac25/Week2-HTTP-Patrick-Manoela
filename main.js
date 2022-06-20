@@ -16,11 +16,15 @@
 const API_KEY = "7878bcb59251411fab5fe4c14ee75639";
 
 async function getRecipesByName(name) {
-  const query = await fetch(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${name}&addRecipeInformation=true&fillIngredients=true`
-  );
-  const data = await query.json();
-  return data;
+  try {
+    const query = await fetch(
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${name}&addRecipeInformation=true&fillIngredients=true`
+    );
+    const data = await query.json();
+    return data;
+  } catch (error) {
+    handleError(error);
+  }
 }
 
 // o----------------o
@@ -30,19 +34,23 @@ async function getRecipesByName(name) {
 const PANTRY_ID = "03e72aeb-874d-4b7b-9afc-e5bdb49ef939";
 
 async function getPantryUsers() {
-  const requestOptions = {
-    method: "GET",
-    headers: createHeaders(),
-    redirect: "follow",
-  };
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: createHeaders(),
+      redirect: "follow",
+    };
 
-  const response = await fetch(
-    `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
-    requestOptions
-  );
-  const data = await response.json();
+    const response = await fetch(
+      `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+      requestOptions
+    );
+    const data = await response.json();
 
-  return data.usersArr;
+    return data.usersArr;
+  } catch (error) {
+    handleError(error);
+  }
 }
 
 async function getCurrentUserData(username) {
@@ -55,49 +63,49 @@ async function getCurrentUserData(username) {
 }
 
 async function addPantryUser(data) {
-  const requestOptions = {
-    method: "PUT",
-    headers: createHeaders(),
-    body: JSON.stringify(data),
-    redirect: "follow",
-  };
+  try {
+    const requestOptions = {
+      method: "PUT",
+      headers: createHeaders(),
+      body: JSON.stringify(data),
+      redirect: "follow",
+    };
 
-  // Post information
-  const response = await fetch(
-    `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
-    requestOptions
-  );
+    // Post information
+    const response = await fetch(
+      `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+      requestOptions
+    );
 
-  return response.json();
-}
-
-function createHeaders() {
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  return myHeaders;
+    return response.json();
+  } catch (error) {
+    handleError(error);
+  }
 }
 
 async function updateSavedList(username, savedList) {
-  const data = await getPantryUsers();
-  const currentUser = await data.find((user) => user.username === username);
-  currentUser.savedList = savedList;
+  try {
+    const data = await getPantryUsers();
+    const currentUser = await data.find((user) => user.username === username);
+    currentUser.savedList = savedList;
 
-  const requestOptions = {
-    method: "POST",
-    headers: createHeaders(),
-    body: JSON.stringify({ usersArr: await data }),
-    redirect: "follow",
-  };
+    const requestOptions = {
+      method: "POST",
+      headers: createHeaders(),
+      body: JSON.stringify({ usersArr: await data }),
+      redirect: "follow",
+    };
 
-  // Post information
-  const response = await fetch(
-    `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
-    requestOptions
-  );
+    // Post information
+    await fetch(
+      `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/users`,
+      requestOptions
+    );
 
-  console.log(await getPantryUsers());
-  return;
+    return;
+  } catch (error) {
+    handleError(error);
+  }
 }
 
 async function deleteFromSavedList(username, deletedItemIndex) {
@@ -165,6 +173,7 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
   const ingredients = newElement.querySelector(".card__ingredients");
   const instructions = newElement.querySelector(".card__instructions");
   const seeMore = newElement.querySelector(".card__see-more");
+  const saveBtn = newElement.querySelector(".card__save");
 
   image.src = imageSrc;
   name.innerText = title;
@@ -348,4 +357,16 @@ function createElement({
   if (parentEl) parentEl.append(newElement);
 
   return newElement;
+}
+
+function createHeaders() {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  return myHeaders;
+}
+
+function handleError(error) {
+  console.error(error);
+  createNotification("Oops! Something went wrong.");
 }
