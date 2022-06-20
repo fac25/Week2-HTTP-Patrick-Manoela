@@ -3,11 +3,13 @@
 ### User Stories
 
 [FAC](https://learn.foundersandcoders.com/course/syllabus/pre-apprenticeship/http/project/)
-- [ ] See an interesting mashup of different data
+- [ ] See an interesting mashup of different data 
 - [ ] Input information to change the displayed result
-- [ ] View the app on all of my devices
+- [ ] View the app on all of my devices [#18][i18]
 - [ ] As an impatient user, I want to see some indication that data is loading
 - [ ] As a confused user, I want to be told when something goes wrong
+- [ ] Ensure your app is accessible to as many different users as possible [#17][i17]
+- [ ] Make sure the HTML file has been validated [#19][i19]
 
 
 Project-specific
@@ -29,3 +31,6 @@ Project-specific
 [i1]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/pull/1
 [i2]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/issues/2
 [i7]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/issues/7
+[i17]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/issues/17
+[i18]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/issues/18
+[i19]: https://github.com/fac25/Week2-HTTP-Patrick-Manoela/issues/19
