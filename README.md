@@ -16,7 +16,7 @@ Project-specific
 - [x] As a user I want to be able to search for recipes by ingredient or recipe name. [#1][i1]
 - [ ] I want to filter by different categories.
 - [ ] I want to sort the result by different whatever.
-- [ ] I want to have a quick overview of the recipe without reloading the page.
+- [x] I want to have a quick overview of the recipe's ingredients.
 - [ ] Each recipe should have a different page for me to see in detail the instructions. [#7][i7]
 - [ ] I would like to have a list with my favourite recipes saved. [#2][i2]
 
