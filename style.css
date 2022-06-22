@@ -2097,7 +2097,7 @@ a {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.05);
 }
-
+.sidebar__card:hover > .sidebar__delete,
 .sidebar__card:focus > .sidebar__delete,
 .sidebar__delete:focus {
   opacity: 1;
@@ -2166,6 +2166,7 @@ a {
 .sidebar__errors {
   color: red;
   font-size: 0.8rem;
+  font-style: italic;
 }
 
 .sidebar__label {
