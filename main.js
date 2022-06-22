@@ -6,7 +6,6 @@
   {2} Recipe Search
   {3} Sign In && Register
   {4} CRUD Recipe Binder
-  {5} Sidebar control
 
   {99} Helper Functions 
 */
@@ -148,7 +147,7 @@ async function handleClick() {
   const recipesContainer = document.querySelector(".recipes");
   const recipesArr = searchResponse.results;
 
-  recipesContainer.replaceChildren();
+  recipesContainer.innerHTML = "";
 
   createRecipeCards(recipesArr);
 }
@@ -186,7 +185,6 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
   const saveBtn = newElement.querySelector(".card__save");
 
   imageEl.src = image;
-  imageEl.alt = ""; // Setting alt to empty string for decorative recipe image
   name.innerText = title;
   ingredients.innerHTML = `
     ${extendedIngredients
@@ -211,39 +209,45 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
 // o-------------------------o
 
 const signInBtn = document.querySelector(".sign-in");
-const sidebarSignIn = document.querySelector(".sidebar__sign-in");
-const sidebarRegisterBtn = document.querySelector(".sidebar__register");
-
+const sideBar = document.querySelector(".side-bar");
+const sideBarCloseBtn = document.querySelector(".side-bar__close");
+const sideBarSignIn = document.querySelector(".side-bar__sign-in");
+const sideBarRegisterBtn = document.querySelector(".side-bar__register");
 const username = document.querySelector("#username");
 const password = document.querySelector("#password");
 
-signInBtn.addEventListener("click", toggleSideBar);
-sidebarSignIn.addEventListener("click", signInAttempt);
-sidebarRegisterBtn.addEventListener("click", register);
-
 // Check if user has already signed in, in previous sessions
 if (localStorage.signedIn) signIn();
+
+signInBtn.addEventListener("click", toggleSideBar);
+sideBarCloseBtn.addEventListener("click", toggleSideBar);
+sideBarSignIn.addEventListener("click", signInAttempt);
+sideBarRegisterBtn.addEventListener("click", register);
+
+// Display Modal
+function toggleSideBar() {
+  sideBar.classList.toggle("side-bar--active");
+}
 
 async function signInAttempt() {
   const currentUserData = await getCurrentUserData(username.value);
 
   // If fields are empty, return notification
-  if (username.value === "" || password.value === "") {
-    return handleInputError("Please fill out all required fields");
-  }
+  if (!username.value || !password.value)
+    return createNotification("Please fill out all required fields");
 
-  if (!currentUserData) return handleInputError("Username does not exist");
+  if (!currentUserData) return createNotification("Username does not exist");
   currentUserData.password === password.value
     ? signIn()
-    : handleInputError("Incorrect password");
+    : createNotification("Incorrect password");
 }
 
 function signIn() {
-  const sidebarDefaultContent = document.querySelector(
-    ".sidebar__default-content"
+  const sideBarDefaultContent = document.querySelector(
+    ".side-bar__default-content"
   );
   // Hide default content to show binder content
-  sidebarDefaultContent.classList.add("sidebar__default-content--hidden");
+  sideBarDefaultContent.classList.add("side-bar__default-content--hidden");
 
   // Change Sign In btn content
   signInBtn.innerHTML = "Recipe Binder";
@@ -263,11 +267,7 @@ async function register() {
     (user) => user.username === username.value
   );
 
-  if (username.value === "" || password.value === "") {
-    return handleInputError("Please fill out all required fields");
-  }
-
-  if (usernameExists) return handleInputError("Username already exists");
+  if (usernameExists) return createNotification("Username already exists");
 
   await addPantryUser({
     usersArr: [{ username: username.value, password: password.value }],
@@ -281,18 +281,18 @@ async function register() {
 // | {4} CRUD Recipe Binder |
 // o------------------0-----o
 async function updateSideBarContent() {
-  const sidebarTitle = document.querySelector(".sidebar__title");
+  const sideBarTitle = document.querySelector(".side-bar__title");
   const currentUserData = await getCurrentUserData(localStorage.username);
   const savedList = await currentUserData?.savedList;
 
-  sidebarTitle.innerText = "Recipe Binder";
+  sideBarTitle.innerText = "Recipe Binder";
 
   // If user's savedList is empty, exit function
   if (!savedList)
     return createElement({
       tag: "p",
-      className: "sidebar__empty",
-      parentSelector: ".sidebar__recipes",
+      className: "side-bar__empty",
+      parentSelector: ".side-bar__recipes",
       text: "You haven't saved any recipes yet",
     });
 
@@ -300,37 +300,37 @@ async function updateSideBarContent() {
 }
 
 function renderSavedList(savedList) {
-  const parentContainer = document.querySelector(".sidebar__recipes");
+  const parentContainer = document.querySelector(".side-bar__recipes");
 
   // Clear element before rendering
-  parentContainer.replaceChildren();
+  parentContainer.innerHTML = "";
 
   savedList.forEach((item, index) => {
     const recipeAnchor = createElement({
       tag: "a",
       parent: parentContainer,
-      className: "sidebar__card",
+      className: "side-bar__card",
     });
     recipeAnchor.href = item.sourceUrl;
 
     const recipeImage = createElement({
       tag: "img",
       parent: recipeAnchor,
-      className: "sidebar__image",
+      className: "side-bar__image",
     });
     recipeImage.src = item.image;
 
     const recipeTitle = createElement({
-      tag: "h2",
+      tag: "p",
       parent: recipeAnchor,
-      className: "sidebar__name",
+      className: "side-bar__name",
       text: item.title,
     });
 
     const deleteBtn = createElement({
       tag: "button",
       parent: recipeAnchor,
-      className: "sidebar__delete",
+      className: "side-bar__delete",
       innerHTML: `<i class="fa fa-trash"></i>`,
     });
 
@@ -347,59 +347,9 @@ function saveRecipe(recipeInfo) {
   addToSavedList(localStorage.username, recipeInfo);
 }
 
-// o----------------------o
-// | {5} Side bar control |
-// o----------------------o
-const sidebar = document.querySelector(".sidebar");
-const sidebarCloseBtn = document.querySelector(".sidebar__close");
-
-document.addEventListener("keydown", hideSideBarOnEscPress);
-sidebarCloseBtn.addEventListener("click", toggleSideBar);
-
-// Display/Hide Side bar
-function toggleSideBar() {
-  sidebar.classList.toggle("sidebar--active");
-  toggleInert();
-}
-
-// Apply/remove inert [Focus management for keyboard users]
-function toggleInert() {
-  const pageElements = [
-    document.querySelector("nav"),
-    document.querySelector("main"),
-    document.querySelector("footer"),
-    sidebar,
-  ];
-
-  pageElements.forEach((element) => (element.inert = !element.inert));
-}
-
-function hideSideBarOnEscPress({ key }) {
-  if (key === "Escape" && sidebar.classList.contains("sidebar--active"))
-    toggleSideBar();
-}
 // o-----------------------o
 // | {99} Helper Functions |
 // o-----------------------o
-
-function handleInputError(text) {
-  addToInputErrors(text);
-  createNotification(text);
-}
-
-function addToInputErrors(text) {
-  const inputErrorsList = document.querySelector(".sidebar__errors");
-
-  // Empty list
-  inputErrorsList.replaceChildren();
-
-  createElement({
-    tag: "li",
-    className: "sidebar__error",
-    parent: inputErrorsList,
-    text: text,
-  });
-}
 
 function createNotification(text) {
   const notificationsDiv = document.querySelector(".notifications");
