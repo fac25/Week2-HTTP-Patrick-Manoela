@@ -4,12 +4,15 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A website that lets you search and save favourite recipes.">
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <linkhttp://127.0.0.1:5500/index.html
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"
-    rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
     <title>Lasagna-me</title>
   </head>
   <body>
@@ -32,10 +35,9 @@
     <header class="w3-display-container w3-wide" id="home">
       <img
         class="w3-image"
-        src="img/lasagna2.jpg"
+        src="img/hero.jpg"
         alt="Lasagna"
         width="1600"
-        height="800"
       />
       <div class="w3-display-bottomleft w3-padding-large w3-opacity">
         <h1 class="w3-large">RECIPE FINDER & BINDER</h1>
@@ -63,7 +65,6 @@
             id="username"
             type="text"
             placeholder="Your username"
-            aria-describedby="sidebar__errors"
             required
           />
           <label class="sidebar__label" for="password">Password</label>
@@ -72,7 +73,6 @@
             id="password"
             type="password"
             placeholder="Your password"
-            aria-describedby="sidebar__errors"
             required
           />
           <div class="sidebar__buttons-wrapper">
@@ -96,7 +96,29 @@
             type="search"
             class="search search__input"
           />
+        <img
+          class="clear-icon"
+          src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxLjk3NiA1MS45NzYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxLjk3NiA1MS45NzY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDQuMzczLDcuNjAzYy0xMC4xMzctMTAuMTM3LTI2LjYzMi0xMC4xMzgtMzYuNzcsMGMtMTAuMTM4LDEwLjEzOC0xMC4xMzcsMjYuNjMyLDAsMzYuNzdzMjYuNjMyLDEwLjEzOCwzNi43NywwICAgQzU0LjUxLDM0LjIzNSw1NC41MSwxNy43NCw0NC4zNzMsNy42MDN6IE0zNi4yNDEsMzYuMjQxYy0wLjc4MSwwLjc4MS0yLjA0NywwLjc4MS0yLjgyOCwwbC03LjQyNS03LjQyNWwtNy43NzgsNy43NzggICBjLTAuNzgxLDAuNzgxLTIuMDQ3LDAuNzgxLTIuODI4LDBjLTAuNzgxLTAuNzgxLTAuNzgxLTIuMDQ3LDAtMi44MjhsNy43NzgtNy43NzhsLTcuNDI1LTcuNDI1Yy0wLjc4MS0wLjc4MS0wLjc4MS0yLjA0OCwwLTIuODI4ICAgYzAuNzgxLTAuNzgxLDIuMDQ3LTAuNzgxLDIuODI4LDBsNy40MjUsNy40MjVsNy4wNzEtNy4wNzFjMC43ODEtMC43ODEsMi4wNDctMC43ODEsMi44MjgsMGMwLjc4MSwwLjc4MSwwLjc4MSwyLjA0NywwLDIuODI4ICAgbC03LjA3MSw3LjA3MWw3LjQyNSw3LjQyNUMzNy4wMjIsMzQuMTk0LDM3LjAyMiwzNS40NiwzNi4yNDEsMzYuMjQxeiIgZmlsbD0iIzAwMDAwMCIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo="
+        />
           <button class="search__button button-8">Search</button>
+      </div>
+    </div>
+    <section class="recipes w3-padding-16 w3-center grid-container"></section>
+
+    <template class="card--template">
+      <div class="card flex">
+        <div>
+          <img class="card__image" />
+        </div>
+        <h4 class="card__name"></h4>
+        <div class="card__content">
+          <ul class="card__ingredients"></ul>
+        <div class="card__buttons">
+          <a class="card__see-more" target="_blank">See more</a>
+          <button class="card__save">
+            <i class="fa-heart fa-regular"></i>
+          </button>
+        </div>
         </div>
       </div>
       <div class="recipes w3-padding-16 w3-center grid-container"></div>
@@ -120,17 +142,10 @@
 
       <hr />
     </main>
-
     <!-- Footer -->
     <footer class="w3-center w3-light-grey w3-padding-32">
       <p>
-        Powered by
-        <a
-          href="https://www.w3schools.com/w3css/default.asp"
-          target="_blank"
-          class="w3-hover-text-green"
-          >w3.css</a
-        >
+        2022 All rights reserved. <strong>Lasagna-me</strong>
       </p>
     </footer>
 
