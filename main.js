@@ -283,7 +283,7 @@ async function register() {
 async function updateSideBarContent() {
   const sideBarTitle = document.querySelector(".side-bar__title");
   const currentUserData = await getCurrentUserData(localStorage.username);
-  const savedList = await currentUserData.savedList;
+  const savedList = await currentUserData?.savedList;
 
   sideBarTitle.innerText = "Recipe Binder";
 
