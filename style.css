@@ -26,9 +26,7 @@ ul,
 li {
   margin: 0 0 5px 0;
 }
-ul {
-  border-bottom: 2px solid rgb(224, 255, 206);
-}
+
 ol {
   font-size: 1.15em;
 }
@@ -165,8 +163,8 @@ h4 {
 .card__ingredients,
 .card__instructions {
   font-family: "Montserrat", sans-serif;
-  max-height: 110px;
   overflow: hidden;
+  max-height: 240px;
   text-overflow: ellipsis;
 }
 
@@ -178,10 +176,19 @@ h4 {
   font-size: 1em;
   background-color: #8d9d80;
 }
+.card__content {
+  display: flex;
+  height: 280px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: space-between;
+}
+
 
 .card__buttons {
   display: flex;
   justify-content: space-around;
+  padding: 5px;
   width: 100%;
 }
 

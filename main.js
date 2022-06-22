@@ -137,7 +137,11 @@ const searchInput = document.querySelector(".search__input");
 const searchButton = document.querySelector(".search__button");
 
 searchButton.addEventListener("click", handleClick);
-
+searchInput.addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') {
+    handleClick();
+  }
+});
 async function handleClick() {
   const searchResponse = await getRecipesByName(searchInput.value);
   const recipesContainer = document.querySelector(".recipes");
@@ -176,7 +180,7 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
   const imageEl = newElement.querySelector(".card__image");
   const name = newElement.querySelector(".card__name");
   const ingredients = newElement.querySelector(".card__ingredients");
-  const instructions = newElement.querySelector(".card__instructions");
+  // const instructions = newElement.querySelector(".card__instructions");
   const seeMore = newElement.querySelector(".card__see-more");
   const saveBtn = newElement.querySelector(".card__save");
 
@@ -186,12 +190,12 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
     ${extendedIngredients
       .map(
         (ingredient) =>
-          `<li class='card__ingredient>${ingredient.original}</li>`
+          `<li class='card__ingredient'>${ingredient.original}</li>`
       )
       .join("")}`;
-  instructions.innerHTML = `${instructionsData
-    .map((instruction) => `<li class='card__step'>${instruction.step}</li>`)
-    .join("")}`;
+  // instructions.innerHTML = `${instructionsData
+  //   .map((instruction) => `<li class='card__step'>${instruction.step}</li>`)
+  //   .join("")}`;
   seeMore.href = sourceUrl;
   saveBtn.addEventListener("click", () =>
     saveRecipe({ image, title, sourceUrl })
