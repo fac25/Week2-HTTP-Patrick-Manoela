@@ -137,7 +137,11 @@ const searchInput = document.querySelector(".search__input");
 const searchButton = document.querySelector(".search__button");
 
 searchButton.addEventListener("click", handleClick);
-
+searchInput.addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') {
+    handleClick();
+  }
+});
 async function handleClick() {
   const searchResponse = await getRecipesByName(searchInput.value);
   const recipesContainer = document.querySelector(".recipes");
@@ -186,7 +190,7 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
     ${extendedIngredients
       .map(
         (ingredient) =>
-          `<li class='card__ingredient>${ingredient.original}</li>`
+          `<li class='card__ingredient'>${ingredient.original}</li>`
       )
       .join("")}`;
   // instructions.innerHTML = `${instructionsData
