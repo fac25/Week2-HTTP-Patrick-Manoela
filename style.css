@@ -5,7 +5,7 @@ body {
 
 a:focus,
 button:focus {
-  outline: auto;
+  outline-width: 2px;
 }
 
 h1,
@@ -2098,7 +2098,8 @@ a {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.sidebar__card:hover > .sidebar__delete {
+.sidebar__card:focus > .sidebar__delete,
+.sidebar__delete:focus {
   opacity: 1;
   cursor: pointer;
 }
@@ -2110,6 +2111,9 @@ a {
 .sidebar__name {
   margin-left: 1rem;
   user-select: none;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .sidebar__delete {
@@ -2157,6 +2161,11 @@ a {
   flex-direction: column;
   justify-content: space-evenly;
   margin-top: 1rem;
+}
+
+.sidebar__errors {
+  color: red;
+  font-size: 0.8rem;
 }
 
 .sidebar__label {
