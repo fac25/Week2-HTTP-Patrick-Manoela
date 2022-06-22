@@ -17,7 +17,7 @@
   </head>
   <body>
     <!-- Navbar (sit on top) -->
-    <div class="w3-top">
+    <nav class="w3-top">
       <div
         class="w3-bar w3-white w3-padding w3-card"
         style="letter-spacing: 4px"
@@ -25,10 +25,11 @@
         <a href="#home" class="w3-bar-item w3-button">LAZAGNA-ME</a>
         <!-- Right-sided navbar links. Hide them on small screens -->
         <div class="w3-right w3-hide-small">
-          <a href="#sign-in" class="sign-in w3-bar-item w3-button">Sign-in</a>
+          <a href="#search" class="w3-bar-item w3-button">Search</a>
+          <button class="sign-in w3-bar-item w3-button">Sign in</button>
         </div>
       </div>
-    </div>
+    </nav>
 
     <!-- Header -->
     <header class="w3-display-container w3-wide" id="home">
@@ -47,55 +48,59 @@
 
     <div class="notifications"></div>
 
-    <div class="side-bar">
-      <div class="side-bar__header">
-        <h2 class="side-bar__title">Sign In</h2>
-        <i class="side-bar__close fa-solid fa-xmark"></i>
+    <div class="sidebar" inert>
+      <div class="sidebar__header">
+        <h2 class="sidebar__title">Sign In</h2>
+        <button class="sidebar__close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
-      <div class="side-bar__recipes"></div>
-      <div class="side-bar__default-content">
-        <form class="side-bar__form" onsubmit="return false">
-          <label class="side-bar__label" for="name">Username</label>
+      <div class="sidebar__recipes"></div>
+      <div class="sidebar__default-content">
+        <form class="sidebar__form" onsubmit="return false" autocomplete="on">
+          <ul class="sidebar__errors"></ul>
+          <label class="sidebar__label" for="username">Username</label>
           <input
-            class="side-bar__input"
+            class="sidebar__input"
             id="username"
             type="text"
             placeholder="Your username"
             required
           />
-          <label class="side-bar__label" for="question">Password</label>
+          <label class="sidebar__label" for="password">Password</label>
           <input
-            class="side-bar__input"
+            class="sidebar__input"
             id="password"
             type="password"
             placeholder="Your password"
             required
           />
-          <div class="side-bar__buttons-wrapper">
-            <button class="side-bar__register">Register</button>
-            <button class="side-bar__sign-in btn" type="button">Sign In</button>
+          <div class="sidebar__buttons-wrapper">
+            <button class="sidebar__register">Register</button>
+            <button class="sidebar__sign-in btn" type="button">Sign In</button>
           </div>
         </form>
       </div>
     </div>
 
     <!-- Page content -->
-    <div
-      class="w3-content w3-row-padding w3-light-grey w3-padding-64 w3-container"
-      style="max-width: 100%"
-    >
-      <div class="wrapper">
-        <i class="search-icon fa-solid fa-magnifying-glass"></i>
-        <input
-          placeholder="Search"
-          type="search"
-          class="search search__input"
-        />
+    <main>
+      <div
+        class="w3-content w3-row-padding w3-light-grey w3-padding-64 w3-container"
+        style="max-width: 100%"
+      >
+        <div class="wrapper" id="search">
+          <i class="search-icon fa-solid fa-magnifying-glass"></i>
+          <input
+            placeholder="Search"
+            type="search"
+            class="search search__input"
+          />
         <img
           class="clear-icon"
           src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxLjk3NiA1MS45NzYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxLjk3NiA1MS45NzY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDQuMzczLDcuNjAzYy0xMC4xMzctMTAuMTM3LTI2LjYzMi0xMC4xMzgtMzYuNzcsMGMtMTAuMTM4LDEwLjEzOC0xMC4xMzcsMjYuNjMyLDAsMzYuNzdzMjYuNjMyLDEwLjEzOCwzNi43NywwICAgQzU0LjUxLDM0LjIzNSw1NC41MSwxNy43NCw0NC4zNzMsNy42MDN6IE0zNi4yNDEsMzYuMjQxYy0wLjc4MSwwLjc4MS0yLjA0NywwLjc4MS0yLjgyOCwwbC03LjQyNS03LjQyNWwtNy43NzgsNy43NzggICBjLTAuNzgxLDAuNzgxLTIuMDQ3LDAuNzgxLTIuODI4LDBjLTAuNzgxLTAuNzgxLTAuNzgxLTIuMDQ3LDAtMi44MjhsNy43NzgtNy43NzhsLTcuNDI1LTcuNDI1Yy0wLjc4MS0wLjc4MS0wLjc4MS0yLjA0OCwwLTIuODI4ICAgYzAuNzgxLTAuNzgxLDIuMDQ3LTAuNzgxLDIuODI4LDBsNy40MjUsNy40MjVsNy4wNzEtNy4wNzFjMC43ODEtMC43ODEsMi4wNDctMC43ODEsMi44MjgsMGMwLjc4MSwwLjc4MSwwLjc4MSwyLjA0NywwLDIuODI4ICAgbC03LjA3MSw3LjA3MWw3LjQyNSw3LjQyNUMzNy4wMjIsMzQuMTk0LDM3LjAyMiwzNS40NiwzNi4yNDEsMzYuMjQxeiIgZmlsbD0iIzAwMDAwMCIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo="
         />
-        <button class="search__button button-8">Search</button>
+          <button class="search__button button-8">Search</button>
       </div>
     </div>
     <section class="recipes w3-padding-16 w3-center grid-container"></section>
@@ -116,10 +121,27 @@
         </div>
         </div>
       </div>
-    </template>
+      <div class="recipes w3-padding-16 w3-center grid-container"></div>
 
-    <hr />
+      <template class="card--template">
+        <div class="card flex">
+          <div>
+            <img class="card__image" />
+          </div>
+          <h4 class="card__name"></h4>
+          <ul class="card__ingredients"></ul>
+          <ol class="card__instructions"></ol>
+          <div class="card__buttons">
+            <a class="card__see-more">See more</a>
+            <button class="card__save">
+              <i class="fa-heart fa-regular"></i>
+            </button>
+          </div>
+        </div>
+      </template>
 
+      <hr />
+    </main>
     <!-- Footer -->
     <footer class="w3-center w3-light-grey w3-padding-32">
       <p>
