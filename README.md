@@ -5,11 +5,11 @@
 [FAC](https://learn.foundersandcoders.com/course/syllabus/pre-apprenticeship/http/project/)
 - [x] See an interesting mashup of different data 
 - [x] Input information to change the displayed result
-- [ ] View the app on all of my devices [#18][i18]
+- [x] View the app on all of my devices [#18][i18]
 - [ ] As an impatient user, I want to see some indication that data is loading
-- [ ] As a confused user, I want to be told when something goes wrong [#20][i20]
-- [ ] Ensure your app is accessible to as many different users as possible [#17][i17]
-- [ ] Make sure the HTML file has been validated [#19][i19]
+- [x] As a confused user, I want to be told when something goes wrong [#20][i20]
+- [x] Ensure your app is accessible to as many different users as possible [#17][i17]
+- [x] Make sure the HTML file has been validated [#19][i19]
 
 
 Project-specific
