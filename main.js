@@ -144,7 +144,7 @@ async function handleClick() {
   const recipesContainer = document.querySelector(".recipes");
   const recipesArr = searchResponse.results;
 
-  recipesContainer.innerHTML = "";
+  recipesContainer.replaceChildren();
 
   createRecipeCards(recipesArr);
 }
@@ -207,25 +207,31 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
 // o-------------------------o
 
 const signInBtn = document.querySelector(".sign-in");
+const sidebarSignIn = document.querySelector(".sidebar__sign-in");
+const sidebarRegisterBtn = document.querySelector(".sidebar__register");
+
 const username = document.querySelector("#username");
 const password = document.querySelector("#password");
 
+signInBtn.addEventListener("click", toggleSideBar);
+sidebarSignIn.addEventListener("click", signInAttempt);
+sidebarRegisterBtn.addEventListener("click", register);
+
 // Check if user has already signed in, in previous sessions
 if (localStorage.signedIn) signIn();
-
-signInBtn.addEventListener("click", toggleSideBar);
 
 async function signInAttempt() {
   const currentUserData = await getCurrentUserData(username.value);
 
   // If fields are empty, return notification
-  if (!username.value || !password.value)
-    return createNotification("Please fill out all required fields");
+  if (username.value === "" || password.value === "") {
+    return handleInputError("Please fill out all required fields");
+  }
 
-  if (!currentUserData) return createNotification("Username does not exist");
+  if (!currentUserData) return handleInputError("Username does not exist");
   currentUserData.password === password.value
     ? signIn()
-    : createNotification("Incorrect password");
+    : handleInputError("Incorrect password");
 }
 
 function signIn() {
@@ -253,7 +259,11 @@ async function register() {
     (user) => user.username === username.value
   );
 
-  if (usernameExists) return createNotification("Username already exists");
+  if (username.value === "" || password.value === "") {
+    return handleInputError("Please fill out all required fields");
+  }
+
+  if (usernameExists) return handleInputError("Username already exists");
 
   await addPantryUser({
     usersArr: [{ username: username.value, password: password.value }],
@@ -289,7 +299,7 @@ function renderSavedList(savedList) {
   const parentContainer = document.querySelector(".sidebar__recipes");
 
   // Clear element before rendering
-  parentContainer.innerHTML = "";
+  parentContainer.replaceChildren();
 
   savedList.forEach((item, index) => {
     const recipeAnchor = createElement({
@@ -338,13 +348,9 @@ function saveRecipe(recipeInfo) {
 // o----------------------o
 const sidebar = document.querySelector(".sidebar");
 const sidebarCloseBtn = document.querySelector(".sidebar__close");
-const sidebarSignIn = document.querySelector(".sidebar__sign-in");
-const sidebarRegisterBtn = document.querySelector(".sidebar__register");
 
 document.addEventListener("keydown", hideSideBarOnEscPress);
 sidebarCloseBtn.addEventListener("click", toggleSideBar);
-sidebarSignIn.addEventListener("click", signInAttempt);
-sidebarRegisterBtn.addEventListener("click", register);
 
 // Display/Hide Side bar
 function toggleSideBar() {
@@ -371,6 +377,25 @@ function hideSideBarOnEscPress({ key }) {
 // o-----------------------o
 // | {99} Helper Functions |
 // o-----------------------o
+
+function handleInputError(text) {
+  addToInputErrors(text);
+  createNotification(text);
+}
+
+function addToInputErrors(text) {
+  const inputErrorsList = document.querySelector(".sidebar__errors");
+
+  // Empty list
+  inputErrorsList.replaceChildren();
+
+  createElement({
+    tag: "li",
+    className: "sidebar__error",
+    parent: inputErrorsList,
+    text: text,
+  });
+}
 
 function createNotification(text) {
   const notificationsDiv = document.querySelector(".notifications");
