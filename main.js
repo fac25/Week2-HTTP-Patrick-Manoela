@@ -6,6 +6,7 @@
   {2} Recipe Search
   {3} Sign In && Register
   {4} CRUD Recipe Binder
+  {5} Sidebar control
 
   {99} Helper Functions 
 */
@@ -205,10 +206,6 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
 // o-------------------------o
 
 const signInBtn = document.querySelector(".sign-in");
-const sideBar = document.querySelector(".side-bar");
-const sideBarCloseBtn = document.querySelector(".side-bar__close");
-const sideBarSignIn = document.querySelector(".side-bar__sign-in");
-const sideBarRegisterBtn = document.querySelector(".side-bar__register");
 const username = document.querySelector("#username");
 const password = document.querySelector("#password");
 
@@ -216,14 +213,6 @@ const password = document.querySelector("#password");
 if (localStorage.signedIn) signIn();
 
 signInBtn.addEventListener("click", toggleSideBar);
-sideBarCloseBtn.addEventListener("click", toggleSideBar);
-sideBarSignIn.addEventListener("click", signInAttempt);
-sideBarRegisterBtn.addEventListener("click", register);
-
-// Display Modal
-function toggleSideBar() {
-  sideBar.classList.toggle("side-bar--active");
-}
 
 async function signInAttempt() {
   const currentUserData = await getCurrentUserData(username.value);
@@ -343,6 +332,35 @@ function saveRecipe(recipeInfo) {
   addToSavedList(localStorage.username, recipeInfo);
 }
 
+// o----------------------o
+// | {5} Side bar control |
+// o----------------------o
+const sideBar = document.querySelector(".side-bar");
+const sideBarCloseBtn = document.querySelector(".side-bar__close");
+const sideBarSignIn = document.querySelector(".side-bar__sign-in");
+const sideBarRegisterBtn = document.querySelector(".side-bar__register");
+
+sideBarCloseBtn.addEventListener("click", toggleSideBar);
+sideBarSignIn.addEventListener("click", signInAttempt);
+sideBarRegisterBtn.addEventListener("click", register);
+
+// Display/Hide Side bar
+function toggleSideBar() {
+  sideBar.classList.toggle("side-bar--active");
+  toggleInert();
+}
+
+// Apply/remove inert [Focus management for keyboard users]
+function toggleInert() {
+  const pageElements = [
+    document.querySelector("nav"),
+    document.querySelector("main"),
+    document.querySelector("footer"),
+    sideBar,
+  ];
+
+  pageElements.forEach((element) => (element.inert = !element.inert));
+}
 // o-----------------------o
 // | {99} Helper Functions |
 // o-----------------------o
