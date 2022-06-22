@@ -23,8 +23,7 @@
         <a href="#home" class="w3-bar-item w3-button">LAZAGNA-ME</a>
         <!-- Right-sided navbar links. Hide them on small screens -->
         <div class="w3-right w3-hide-small">
-          <a href="#about" class="w3-bar-item w3-button">About</a>
-          <a href="#menu" class="w3-bar-item w3-button">Quick-view</a>
+          <a href="#search" class="w3-bar-item w3-button">Search</a>
           <a href="#sign-in" class="sign-in w3-bar-item w3-button">Sign-in</a>
         </div>
       </div>
@@ -56,7 +55,7 @@
       <div class="side-bar__recipes"></div>
       <div class="side-bar__default-content">
         <form class="side-bar__form" onsubmit="return false">
-          <label class="side-bar__label" for="name">Username</label>
+          <label class="side-bar__label" for="username">Username</label>
           <input
             class="side-bar__input"
             id="username"
@@ -64,7 +63,7 @@
             placeholder="Your username"
             required
           />
-          <label class="side-bar__label" for="question">Password</label>
+          <label class="side-bar__label" for="password">Password</label>
           <input
             class="side-bar__input"
             id="password"
@@ -85,21 +84,17 @@
       class="w3-content w3-row-padding w3-light-grey w3-padding-64 w3-container"
       style="max-width: 100%"
     >
-      <div class="wrapper">
+      <div class="wrapper" id="search">
         <i class="search-icon fa-solid fa-magnifying-glass"></i>
         <input
           placeholder="Search"
           type="search"
           class="search search__input"
         />
-        <img
-          class="clear-icon"
-          src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxLjk3NiA1MS45NzYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxLjk3NiA1MS45NzY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDQuMzczLDcuNjAzYy0xMC4xMzctMTAuMTM3LTI2LjYzMi0xMC4xMzgtMzYuNzcsMGMtMTAuMTM4LDEwLjEzOC0xMC4xMzcsMjYuNjMyLDAsMzYuNzdzMjYuNjMyLDEwLjEzOCwzNi43NywwICAgQzU0LjUxLDM0LjIzNSw1NC41MSwxNy43NCw0NC4zNzMsNy42MDN6IE0zNi4yNDEsMzYuMjQxYy0wLjc4MSwwLjc4MS0yLjA0NywwLjc4MS0yLjgyOCwwbC03LjQyNS03LjQyNWwtNy43NzgsNy43NzggICBjLTAuNzgxLDAuNzgxLTIuMDQ3LDAuNzgxLTIuODI4LDBjLTAuNzgxLTAuNzgxLTAuNzgxLTIuMDQ3LDAtMi44MjhsNy43NzgtNy43NzhsLTcuNDI1LTcuNDI1Yy0wLjc4MS0wLjc4MS0wLjc4MS0yLjA0OCwwLTIuODI4ICAgYzAuNzgxLTAuNzgxLDIuMDQ3LTAuNzgxLDIuODI4LDBsNy40MjUsNy40MjVsNy4wNzEtNy4wNzFjMC43ODEtMC43ODEsMi4wNDctMC43ODEsMi44MjgsMGMwLjc4MSwwLjc4MSwwLjc4MSwyLjA0NywwLDIuODI4ICAgbC03LjA3MSw3LjA3MWw3LjQyNSw3LjQyNUMzNy4wMjIsMzQuMTk0LDM3LjAyMiwzNS40NiwzNi4yNDEsMzYuMjQxeiIgZmlsbD0iIzAwMDAwMCIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo="
-        />
         <button class="search__button button-8">Search</button>
       </div>
     </div>
-    <section class="recipes w3-padding-16 w3-center grid-container"></section>
+    <div class="recipes w3-padding-16 w3-center grid-container"></div>
 
     <template class="card--template">
       <div class="card flex">
