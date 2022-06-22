@@ -340,6 +340,7 @@ const sideBarCloseBtn = document.querySelector(".side-bar__close");
 const sideBarSignIn = document.querySelector(".side-bar__sign-in");
 const sideBarRegisterBtn = document.querySelector(".side-bar__register");
 
+document.addEventListener("keydown", hideSideBarOnEscPress);
 sideBarCloseBtn.addEventListener("click", toggleSideBar);
 sideBarSignIn.addEventListener("click", signInAttempt);
 sideBarRegisterBtn.addEventListener("click", register);
@@ -360,6 +361,11 @@ function toggleInert() {
   ];
 
   pageElements.forEach((element) => (element.inert = !element.inert));
+}
+
+function hideSideBarOnEscPress({ key }) {
+  if (key === "Escape" && sideBar.classList.contains("side-bar--active"))
+    toggleSideBar();
 }
 // o-----------------------o
 // | {99} Helper Functions |
