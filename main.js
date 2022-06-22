@@ -252,9 +252,11 @@ function signIn() {
   // Change Sign In btn content
   signInBtn.innerHTML = "Recipe Binder";
 
-  if (!localStorage.signedIn) createNotification("Signed in successfully");
-  localStorage.setItem("signedIn", true);
-  localStorage.setItem("username", username.value);
+  if (!localStorage.signedIn) {
+    createNotification("Signed in successfully");
+    localStorage.setItem("signedIn", true);
+    localStorage.setItem("username", username.value);
+  }
 
   updateSideBarContent();
 }
