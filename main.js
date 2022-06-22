@@ -228,11 +228,11 @@ async function signInAttempt() {
 }
 
 function signIn() {
-  const sideBarDefaultContent = document.querySelector(
-    ".side-bar__default-content"
+  const sidebarDefaultContent = document.querySelector(
+    ".sidebar__default-content"
   );
   // Hide default content to show binder content
-  sideBarDefaultContent.classList.add("side-bar__default-content--hidden");
+  sidebarDefaultContent.classList.add("sidebar__default-content--hidden");
 
   // Change Sign In btn content
   signInBtn.innerHTML = "Recipe Binder";
@@ -266,18 +266,18 @@ async function register() {
 // | {4} CRUD Recipe Binder |
 // o------------------0-----o
 async function updateSideBarContent() {
-  const sideBarTitle = document.querySelector(".side-bar__title");
+  const sidebarTitle = document.querySelector(".sidebar__title");
   const currentUserData = await getCurrentUserData(localStorage.username);
   const savedList = await currentUserData.savedList;
 
-  sideBarTitle.innerText = "Recipe Binder";
+  sidebarTitle.innerText = "Recipe Binder";
 
   // If user's savedList is empty, exit function
   if (!savedList)
     return createElement({
       tag: "p",
-      className: "side-bar__empty",
-      parentSelector: ".side-bar__recipes",
+      className: "sidebar__empty",
+      parentSelector: ".sidebar__recipes",
       text: "You haven't saved any recipes yet",
     });
 
@@ -285,7 +285,7 @@ async function updateSideBarContent() {
 }
 
 function renderSavedList(savedList) {
-  const parentContainer = document.querySelector(".side-bar__recipes");
+  const parentContainer = document.querySelector(".sidebar__recipes");
 
   // Clear element before rendering
   parentContainer.innerHTML = "";
@@ -294,28 +294,28 @@ function renderSavedList(savedList) {
     const recipeAnchor = createElement({
       tag: "a",
       parent: parentContainer,
-      className: "side-bar__card",
+      className: "sidebar__card",
     });
     recipeAnchor.href = item.sourceUrl;
 
     const recipeImage = createElement({
       tag: "img",
       parent: recipeAnchor,
-      className: "side-bar__image",
+      className: "sidebar__image",
     });
     recipeImage.src = item.image;
 
     const recipeTitle = createElement({
       tag: "p",
       parent: recipeAnchor,
-      className: "side-bar__name",
+      className: "sidebar__name",
       text: item.title,
     });
 
     const deleteBtn = createElement({
       tag: "button",
       parent: recipeAnchor,
-      className: "side-bar__delete",
+      className: "sidebar__delete",
       innerHTML: `<i class="fa fa-trash"></i>`,
     });
 
@@ -335,19 +335,19 @@ function saveRecipe(recipeInfo) {
 // o----------------------o
 // | {5} Side bar control |
 // o----------------------o
-const sideBar = document.querySelector(".side-bar");
-const sideBarCloseBtn = document.querySelector(".side-bar__close");
-const sideBarSignIn = document.querySelector(".side-bar__sign-in");
-const sideBarRegisterBtn = document.querySelector(".side-bar__register");
+const sidebar = document.querySelector(".sidebar");
+const sidebarCloseBtn = document.querySelector(".sidebar__close");
+const sidebarSignIn = document.querySelector(".sidebar__sign-in");
+const sidebarRegisterBtn = document.querySelector(".sidebar__register");
 
 document.addEventListener("keydown", hideSideBarOnEscPress);
-sideBarCloseBtn.addEventListener("click", toggleSideBar);
-sideBarSignIn.addEventListener("click", signInAttempt);
-sideBarRegisterBtn.addEventListener("click", register);
+sidebarCloseBtn.addEventListener("click", toggleSideBar);
+sidebarSignIn.addEventListener("click", signInAttempt);
+sidebarRegisterBtn.addEventListener("click", register);
 
 // Display/Hide Side bar
 function toggleSideBar() {
-  sideBar.classList.toggle("side-bar--active");
+  sidebar.classList.toggle("sidebar--active");
   toggleInert();
 }
 
@@ -357,14 +357,14 @@ function toggleInert() {
     document.querySelector("nav"),
     document.querySelector("main"),
     document.querySelector("footer"),
-    sideBar,
+    sidebar,
   ];
 
   pageElements.forEach((element) => (element.inert = !element.inert));
 }
 
 function hideSideBarOnEscPress({ key }) {
-  if (key === "Escape" && sideBar.classList.contains("side-bar--active"))
+  if (key === "Escape" && sidebar.classList.contains("sidebar--active"))
     toggleSideBar();
 }
 // o-----------------------o

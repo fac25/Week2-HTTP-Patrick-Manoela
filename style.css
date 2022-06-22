@@ -2063,7 +2063,7 @@ a {
   margin-left: auto;
 }
 
-.side-bar {
+.sidebar {
   position: fixed;
   top: 0;
   right: -100rem; /* Hide from screen */
@@ -2078,37 +2078,37 @@ a {
   z-index: 3;
 }
 
-.side-bar--active {
+.sidebar--active {
   right: 0;
 }
 
-.side-bar__card {
+.sidebar__card {
   display: flex;
   align-items: center;
   margin-top: 1rem;
   padding: 1rem;
 }
 
-.side-bar__card:hover {
+.sidebar__card:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.side-bar__card:hover > .side-bar__delete {
+.sidebar__card:hover > .sidebar__delete {
   opacity: 1;
   cursor: pointer;
 }
 
-.side-bar__image {
+.sidebar__image {
   height: 50px;
 }
 
-.side-bar__name {
+.sidebar__name {
   margin-left: 1rem;
   user-select: none;
 }
 
-.side-bar__delete {
+.sidebar__delete {
   background-color: transparent;
   border: none;
   margin-left: 1rem;
@@ -2116,50 +2116,50 @@ a {
   opacity: 0;
 }
 
-.side-bar__delete:hover {
+.sidebar__delete:hover {
   transform: scale(1.1);
 }
 
-.side-bar__default-content--hidden {
+.sidebar__default-content--hidden {
   display: none;
 }
 
-.side-bar__header {
+.sidebar__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
 }
 
-.side-bar__title {
+.sidebar__title {
   margin: 0;
   text-align: center;
   color: #4f4f4f;
   font-size: 1.5rem;
 }
 
-.side-bar__close {
+.sidebar__close {
   transition: all 0.2s linear;
   margin-left: 1rem;
 }
 
-.side-bar__close:hover {
+.sidebar__close:hover {
   transform: scale(1.2) rotate(90deg);
   cursor: pointer;
 }
 
-.side-bar__form {
+.sidebar__form {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   margin-top: 1rem;
 }
 
-.side-bar__label {
+.sidebar__label {
   margin-top: 1rem;
 }
 
-.side-bar__input {
+.sidebar__input {
   height: 2rem;
   padding-left: 1rem;
   margin-top: 0.5rem;
@@ -2167,14 +2167,14 @@ a {
   outline-color: #0066ff;
 }
 
-.side-bar__buttons-wrapper {
+.sidebar__buttons-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
 }
 
-.side-bar__sign-in {
+.sidebar__sign-in {
   display: block;
   width: fit-content;
   padding: 0.5rem 1.3rem;
@@ -2187,19 +2187,19 @@ a {
   opacity: 0.9;
 }
 
-.side-bar__sign-in:hover {
+.sidebar__sign-in:hover {
   cursor: pointer;
   opacity: 1;
 }
 
-.side-bar__register {
+.sidebar__register {
   background-color: transparent;
   border: none;
   text-decoration: underline;
   transition: all 0.1s linear;
 }
 
-.side-bar__register:hover {
+.sidebar__register:hover {
   cursor: pointer;
 }
 
