@@ -182,6 +182,7 @@ function createFromTemplate({ templateSelector, parentSelector, content }) {
   const saveBtn = newElement.querySelector(".card__save");
 
   imageEl.src = image;
+  imageEl.alt = ""; // Setting alt to empty string for decorative recipe image
   name.innerText = title;
   ingredients.innerHTML = `
     ${extendedIngredients
@@ -306,7 +307,7 @@ function renderSavedList(savedList) {
     recipeImage.src = item.image;
 
     const recipeTitle = createElement({
-      tag: "p",
+      tag: "h2",
       parent: recipeAnchor,
       className: "sidebar__name",
       text: item.title,
