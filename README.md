@@ -17,8 +17,8 @@ Project-specific
 - [ ] I want to filter by different categories.
 - [ ] I want to sort the result by different whatever.
 - [x] I want to have a quick overview of the recipe's ingredients.
-- [ ] Each recipe should have a different page for me to see in detail the instructions. [#7][i7]
-- [ ] I would like to have a list with my favourite recipes saved. [#2][i2]
+- [x] Each recipe should have a different page for me to see in detail the instructions. [#7][i7]
+- [x] I would like to have a list with my favourite recipes saved. [#2][i2]
 
 
 
