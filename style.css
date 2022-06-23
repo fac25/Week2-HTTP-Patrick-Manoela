@@ -37,6 +37,11 @@ ul {
   z-index: -1;
 }
 
+.loader__text {
+  background-color: white;
+  padding: 1rem 2rem;
+}
+
 .loading {
   display: flex;
   justify-content: center;

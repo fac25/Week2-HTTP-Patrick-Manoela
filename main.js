@@ -40,7 +40,6 @@ async function getRecipesByName(name) {
 const PANTRY_ID = "03e72aeb-874d-4b7b-9afc-e5bdb49ef939";
 
 async function getPantryUsers() {
-  toggleLoadingIndicator();
   try {
     const requestOptions = {
       method: "GET",
@@ -54,7 +53,6 @@ async function getPantryUsers() {
     );
     const data = await response.json();
 
-    toggleLoadingIndicator();
     return data.usersArr;
   } catch (error) {
     handleError(error);
@@ -63,7 +61,7 @@ async function getPantryUsers() {
 
 async function getCurrentUserData(username) {
   const users = await getPantryUsers();
-  const currentUserData = await users.find(
+  const currentUserData = await users?.find(
     (user) => user.username.toLowerCase() === username.toLowerCase()
   );
 
@@ -117,6 +115,7 @@ async function updateSavedList(username, savedList) {
 }
 
 async function deleteFromSavedList(username, deletedItemIndex) {
+  toggleLoadingIndicator();
   const currentUserData = await getCurrentUserData(username);
   const savedList = await currentUserData.savedList;
   if (!savedList) currentUserData.savedList = [];
@@ -124,9 +123,11 @@ async function deleteFromSavedList(username, deletedItemIndex) {
   currentUserData.savedList.splice(deletedItemIndex, 1);
   await updateSavedList(username, await currentUserData.savedList);
   updateSideBarContent();
+  toggleLoadingIndicator();
 }
 
 async function addToSavedList(username, newItem) {
+  toggleLoadingIndicator();
   const currentUserData = await getCurrentUserData(username);
   const savedList = await currentUserData.savedList;
   if (!savedList) currentUserData.savedList = [];
@@ -134,6 +135,7 @@ async function addToSavedList(username, newItem) {
   currentUserData.savedList.push(newItem);
   await updateSavedList(username, await currentUserData.savedList);
   updateSideBarContent();
+  toggleLoadingIndicator();
 }
 
 // o-------------------o
@@ -154,6 +156,7 @@ async function handleClick() {
   const recipesContainer = document.querySelector(".recipes");
   const recipesArr = searchResponse.results;
 
+  if (recipesArr.length === 0) return createNotification("No recipes found");
   recipesContainer.replaceChildren();
 
   createRecipeCards(recipesArr);
