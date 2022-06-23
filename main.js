@@ -320,6 +320,7 @@ function renderSavedList(savedList) {
       className: "sidebar__image",
     });
     recipeImage.src = item.image;
+    recipeImage.alt = ""; // Image is decorative
 
     const recipeTitle = createElement({
       tag: "h2",
