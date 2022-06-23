@@ -1,6 +1,7 @@
 # [Lazagna-me](https://fac25.github.io/Week2-HTTP-Patrick-Manoela/)
 
-This is a website that queries a recipe database and creates a recipe binder for the user
+This is a website that queries a recipe database and creates a recipe binder for the user. 
+Search for a recipe and save it for future reference.
 
 
 ### User Stories
