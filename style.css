@@ -416,21 +416,6 @@ a {
   margin-right: auto;
 }
 
-@media (max-width: 1205px) {
-}
-
-@media (max-width: 600px) {
-  .lz-hide-small {
-    display: none !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .lz-image {
-    display: none;
-  }
-}
-
 @media (max-width: 992px) {
   .search {
     width: 100%;
