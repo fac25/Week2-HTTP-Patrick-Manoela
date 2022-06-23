@@ -355,6 +355,7 @@ function renderSavedList(savedList) {
 }
 
 function saveRecipe(recipeInfo) {
+  if (!localStorage.signedIn) return toggleSideBar();
   toggleSideBar();
   addToSavedList(localStorage.username, recipeInfo);
 }
