@@ -18,11 +18,15 @@
 const API_KEY = "7878bcb59251411fab5fe4c14ee75639";
 
 async function getRecipesByName(name) {
+  toggleLoadingIndicator();
+
   try {
     const query = await fetch(
       `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${name}&addRecipeInformation=true&fillIngredients=true`
     );
     const data = await query.json();
+    toggleLoadingIndicator();
+
     return data;
   } catch (error) {
     handleError(error);
@@ -36,6 +40,7 @@ async function getRecipesByName(name) {
 const PANTRY_ID = "03e72aeb-874d-4b7b-9afc-e5bdb49ef939";
 
 async function getPantryUsers() {
+  toggleLoadingIndicator();
   try {
     const requestOptions = {
       method: "GET",
@@ -49,6 +54,7 @@ async function getPantryUsers() {
     );
     const data = await response.json();
 
+    toggleLoadingIndicator();
     return data.usersArr;
   } catch (error) {
     handleError(error);
@@ -450,4 +456,9 @@ function createHeaders() {
 function handleError(error) {
   console.error(error);
   createNotification("Oops! Something went wrong.");
+}
+
+function toggleLoadingIndicator() {
+  const loader = document.querySelector(".loader");
+  loader.classList.toggle("loading");
 }
