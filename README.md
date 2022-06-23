@@ -1,5 +1,8 @@
 # [Lazagna-me](https://fac25.github.io/Week2-HTTP-Patrick-Manoela/)
 
+This is a website that queries a recipe database and creates a recipe binder for the user
+
+
 ### User Stories
 
 [FAC](https://learn.foundersandcoders.com/course/syllabus/pre-apprenticeship/http/project/)
