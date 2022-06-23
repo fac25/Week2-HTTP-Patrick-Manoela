@@ -138,8 +138,8 @@ const searchInput = document.querySelector(".search__input");
 const searchButton = document.querySelector(".search__button");
 
 searchButton.addEventListener("click", handleClick);
-searchInput.addEventListener('keypress', function (e) {
-  if (e.key === 'Enter') {
+searchInput.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
     handleClick();
   }
 });
@@ -247,6 +247,7 @@ function signIn() {
 
   // Change Sign In btn content
   signInBtn.innerHTML = "Recipe Binder";
+  signInBtn.ariaLabel = "Open Recipe Binder";
 
   if (!localStorage.signedIn) {
     createNotification("Signed in successfully");
@@ -333,6 +334,7 @@ function renderSavedList(savedList) {
       className: "sidebar__delete",
       innerHTML: `<i class="fa fa-trash"></i>`,
     });
+    deleteBtn.ariaLabel = "Remove Recipe";
 
     deleteBtn.addEventListener("click", (event) => {
       // Prevent redirection from Recipe Anchor click
@@ -352,6 +354,9 @@ function saveRecipe(recipeInfo) {
 // o----------------------o
 const sidebar = document.querySelector(".sidebar");
 const sidebarCloseBtn = document.querySelector(".sidebar__close");
+
+// Do not allow screen readers to access sidebar by default
+sidebar.inert = true;
 
 document.addEventListener("keydown", hideSideBarOnEscPress);
 sidebarCloseBtn.addEventListener("click", toggleSideBar);
